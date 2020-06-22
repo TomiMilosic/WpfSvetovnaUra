@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>XAct.IO.FS</name>
+    </assembly>
+    <members>
+        <member name="T:XAct.IO.IniFileManager">
+            <summary>
+              Class to handle INI file I/O
+            </summary>
+            <summary>
+              Constructor
+            </summary>
+            <remarks>
+              <para>
+                I've built this class too many times in too many languages...this time, the code was found for free at: http://archive.devx.com/dotnet/discussions/040902/cominterop.asp, thank you!...Although he does end with:
+                this code is meant for example use only. You should add error-trapping and checking (see the DllImportAttribute.SetLastError field in the documentation, and the Marshal.GetLastWin32Error method in the documentation for more information.) 
+              </para>
+              <para>
+                ToDo: 
+                Extend to use XML or INI, according to article:
+                http://www.devx.com/dotnet/Article/7008/0/page/1
+              </para>
+            </remarks>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.GetPrivateProfileString(System.String,System.String,System.String,System.Text.StringBuilder,System.Int32,System.String)">
+            <summary>
+              Wrapper for API Call
+            </summary>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.GetPrivateProfileInt(System.String,System.String,System.Int32,System.String)">
+            <summary>
+              Wrapper for API Call
+            </summary>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.WritePrivateProfileString(System.String,System.String,System.String,System.String)">
+            <summary>
+              Wrapper for API Call
+            </summary>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.GetPrivateProfileSection(System.String,System.Byte[],System.Int32,System.String)">
+            <summary>
+              Wrapper for API Call
+            </summary>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.WritePrivateProfileSection(System.String,System.Byte[],System.String)">
+            <summary>
+              Wrapper for API Call
+            </summary>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.GetPrivateProfileSectionNames(System.Byte[],System.Int32,System.String)">
+            <summary>
+              Wrapper for API Call
+            </summary>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.GetIniValue(System.String,System.String,System.String)">
+            <summary>
+              Returns Value from INI file.
+            </summary>
+            <param name = "fileName"></param>
+            <param name = "section"></param>
+            <param name = "key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.WriteIniValue(System.String,System.String,System.String,System.String)">
+            <summary>
+              Writes string to an INI file.
+            </summary>
+            <param name = "fileName"></param>
+            <param name = "section"></param>
+            <param name = "key"></param>
+            <param name = "sValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.GetIniInt(System.String,System.String,System.String)">
+            <summary>
+              Get Int value from an INI File.
+            </summary>
+            <param name = "fileName"></param>
+            <param name = "section"></param>
+            <param name = "key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.GetIniSection(System.String,System.String)">
+            <summary>
+              Gets List of Values from an INI section.
+            </summary>
+            <param name = "fileName"></param>
+            <param name = "section"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.WriteIniSection(System.String,System.String,System.Collections.Specialized.StringCollection)">
+            <summary>
+              Writes a List to INI Section
+            </summary>
+            <param name = "fileName"></param>
+            <param name = "section"></param>
+            <param name = "items"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.IniFileManager.GetIniSectionNames(System.String)">
+            <summary>
+              Get name of all sections in INI File.
+            </summary>
+            <param name = "fileName"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

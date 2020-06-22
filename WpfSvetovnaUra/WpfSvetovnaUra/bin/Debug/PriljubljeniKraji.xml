@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfKraj xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Kraj>
+    <Kraj>Ljubljana</Kraj>
+    <OsebeVkraju>
+      <Oseba>
+        <ime>Tomi</ime>
+        <priimek>Milosic</priimek>
+        <opombe>Rad se uci!</opombe>
+        <navoljo>
+          <Ura_do1>15:00:00</Ura_do1>
+          <Ura_od1>10:00:00</Ura_od1>
+        </navoljo>
+        <telefon>040879654</telefon>
+      </Oseba>
+      <Oseba>
+        <ime>Janez</ime>
+        <priimek>Novak</priimek>
+        <opombe>Je navoljo samo med 12-13</opombe>
+        <navoljo>
+          <Ura_do1>13:00:00</Ura_do1>
+          <Ura_od1>12:00:00</Ura_od1>
+        </navoljo>
+        <telefon>051444567</telefon>
+      </Oseba>
+      <Oseba>
+        <ime>Luka</ime>
+        <priimek>Hrgarek</priimek>
+        <opombe>Asistent-Feri</opombe>
+        <navoljo>
+          <Ura_do1>23:00:00</Ura_do1>
+          <Ura_od1>21:00:00</Ura_od1>
+        </navoljo>
+        <telefon>040123123</telefon>
+      </Oseba>
+    </OsebeVkraju>
+    <Razlika>0</Razlika>
+    <ClanicaEU>da</ClanicaEU>
+    <Komentar>Slovenija</Komentar>
+    <komentar>Slovenija</komentar>
+  </Kraj>
+  <Kraj>
+    <Kraj>Havana</Kraj>
+    <OsebeVkraju>
+      <Oseba>
+        <ime>Aljaž</ime>
+        <priimek>Gregorčič</priimek>
+        <opombe />
+        <navoljo>
+          <Ura_do1>16:00:00</Ura_do1>
+          <Ura_od1>14:00:00</Ura_od1>
+        </navoljo>
+        <telefon>069420420</telefon>
+      </Oseba>
+    </OsebeVkraju>
+    <Razlika>-6</Razlika>
+    <ClanicaEU>ne</ClanicaEU>
+    <Komentar>Cuba</Komentar>
+    <komentar>Cuba</komentar>
+  </Kraj>
+</ArrayOfKraj>

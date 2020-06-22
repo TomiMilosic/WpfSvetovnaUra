@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfKraj xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Kraj>
+    <Kraj>Berlin</Kraj>
+    <OsebeVkraju />
+    <Razlika>0</Razlika>
+    <ClanicaEU>da</ClanicaEU>
+    <Komentar>Nemčija, kolega Gregor</Komentar>
+    <komentar>Nemčija, kolega Gregor</komentar>
+  </Kraj>
+  <Kraj>
+    <Kraj>Jerusalem</Kraj>
+    <OsebeVkraju />
+    <Razlika>1</Razlika>
+    <ClanicaEU>ne</ClanicaEU>
+    <Komentar>Izrael</Komentar>
+    <komentar>Izrael</komentar>
+  </Kraj>
+  <Kraj>
+    <Kraj>Ljubljana</Kraj>
+    <OsebeVkraju />
+    <Razlika>0</Razlika>
+    <ClanicaEU>da</ClanicaEU>
+    <Komentar>Slovenija</Komentar>
+    <komentar>Slovenija</komentar>
+  </Kraj>
+  <Kraj>
+    <Kraj>Havana</Kraj>
+    <OsebeVkraju />
+    <Razlika>-6</Razlika>
+    <ClanicaEU>ne</ClanicaEU>
+    <Komentar>Cuba</Komentar>
+    <komentar>Cuba</komentar>
+  </Kraj>
+</ArrayOfKraj>

@@ -1,0 +1,113 @@
+﻿<Window x:Class="WpfSvetovnaUra.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSvetovnaUra.UserControls"
+        mc:Ignorable="d"
+        Title="Svetova Ura" Height="450" Width="800" >
+    <Window.Background>
+        <SolidColorBrush x:Name="ozadje" Color="Beige"></SolidColorBrush>
+    </Window.Background>
+
+
+    <Window.Resources>
+
+        <PathGeometry x:Key="nekaj">
+            <PathFigure StartPoint="0,0">
+                <ArcSegment IsLargeArc="True" Size="120,90" Point="1,1" SweepDirection="Clockwise" />
+            </PathFigure>
+        </PathGeometry>
+
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <ColorAnimation To="IndianRed" Duration="0:00:10" AutoReverse="True" RepeatBehavior="Forever" Storyboard.TargetName="ozadje" Storyboard.TargetProperty="Color"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid>
+
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*"></RowDefinition>
+            <RowDefinition Height="144*"></RowDefinition>
+            <RowDefinition Height="247*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition  Width="1*"/>
+            <ColumnDefinition  Width="1*"/>
+            <ColumnDefinition  Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Canvas  Grid.Row="1"  Grid.Column="1" Width="{Binding ActualWidth, ElementName=KrajLabel}" Height="{Binding ActualHeight, ElementName=KrajLabel}">
+            <Ellipse Name="dot" Width="10" Height="10" Fill="Blue" Canvas.Top="90" Canvas.Left="100" >
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="Ellipse.Loaded">
+                        <BeginStoryboard >
+                            <Storyboard RepeatBehavior="Forever">
+                                <DoubleAnimationUsingPath Source="X" Duration="0:00:05" Storyboard.TargetProperty="(Canvas.Left)" PathGeometry="{StaticResource nekaj}"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+        </Canvas>
+        <DockPanel Margin="0,0,0.309,5.673" Grid.ColumnSpan="3">
+            <ToolBarTray DockPanel.Dock="Top"  Margin="0,0,0.309,0" Height="51">
+                <ToolBar>
+                    <Button Content="Dodaj kraj" Click="Button_Click" Margin="0,0,0,-0.182" VerticalAlignment="Bottom" />
+                    <Button Content="Seznam priljubljenih" Click="Button_Click_1" />
+                </ToolBar>
+            </ToolBarTray>
+            <TextBox AcceptsReturn="True" />
+        </DockPanel>
+
+        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Column="0" Grid.Row="1" Height="124" Margin="10,10,10,10">
+            <Label x:Name="KrajLabel" Style="{StaticResource VelikiNapis}"  MouseDoubleClick="KrajLabel_MouseDoubleClick" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Kraj" Grid.Column="0" Grid.Row="1" Height="124" Margin="10,10,10,10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        </Viewbox>
+        <GridSplitter Grid.Column="1" Grid.Row="1" Width="5" HorizontalAlignment="Left"/>
+        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Margin="10,10,10,10" Height="129">
+        <Label x:Name="uraLabel" Style="{StaticResource VelikiNapis}" Content="Ura" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Margin="10,10,10,10" Height="129"/>
+        </Viewbox>
+            <DataGrid Grid.Row="2" Grid.ColumnSpan="3" Name="KrajiSeznam"  SelectionChanged="KrajiSeznam_SelectionChanged" AutoGenerateColumns="False" Margin="10,0,10,10" IsReadOnly="True" MouseRightButtonDown="KrajiSeznam_MouseRightButtonDown">
+            
+            
+            <DataGrid.Columns>
+                <DataGridTextColumn MinWidth="100" Header="Kraj" Binding="{Binding Path=kraj}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Background" Value="PaleVioletRed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=clanicaEU}" Value="da">
+                                    <Setter Property="Background" Value="LightGreen"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="UraTick" MinWidth="100" Header="Ura" Binding="{Binding Path=Ura,StringFormat='HH:mm:ss'}"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Dodaj na seznam priljubljenih" MinWidth="150">
+                    <DataGridTemplateColumn.CellTemplate >
+                        <DataTemplate>
+                            <Button Style="{StaticResource NavadniGumb}" Click="DodajNaSeznam" FontSize="15" HorizontalAlignment="Stretch">+</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Komentar" Width="390" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label  Content="{Binding Path=Komentar, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  ></Label>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <local:UserControl1 Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Right" VerticalAlignment="Top" Height="26" Margin="0,1.327,0.309,0" Width="160"/>
+    </Grid>
+</Window>

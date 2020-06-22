@@ -1,0 +1,51 @@
+﻿<Window x:Class="WpfSvetovnaUra.SeznamPriljubljenih"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSvetovnaUra.UserControls"
+        mc:Ignorable="d"
+        Title="SeznamPriljubljenih" Height="450" Width="800">
+        <Grid Background="Beige">
+
+            <Grid.RowDefinitions>
+                <RowDefinition ></RowDefinition>
+                <RowDefinition Height="1.7*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label FontSize="70"  >Seznam priljubljenih</Label>
+                
+
+            </StackPanel>
+        <DataGrid Grid.Row="2"  Name="SeznamPriljubljenihDataGrid" AutoGenerateColumns="False" Margin="10" IsReadOnly="True" MouseRightButtonDown="SeznamPriljubljenihDataGrid_MouseRightButtonDown">
+            <DataGrid.Columns>
+                <DataGridTextColumn MinWidth="100" Header="Kraj" Binding="{Binding Path=kraj}"></DataGridTextColumn>
+                <DataGridTextColumn x:Name="UraTick" MinWidth="100" Header="Ura" Binding="{Binding Path=Ura,StringFormat='HH:mm:ss'}" ></DataGridTextColumn>
+
+                <DataGridTemplateColumn Header="Osebe v tem kraju:" MinWidth="150">
+                    <DataGridTemplateColumn.CellTemplate >
+                        <DataTemplate>
+                            <Button Click="Button_Click_1" FontSize="15" HorizontalAlignment="Stretch">+</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Osebe v kraju" Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ItemsControl HorizontalAlignment="Center" VerticalAlignment="Stretch" ItemsSource="{Binding Path=OsebeVKraju}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Width="50" Content="{Binding Path=ime}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+    </Grid>
+</Window>

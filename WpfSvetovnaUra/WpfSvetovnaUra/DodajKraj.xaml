@@ -1,0 +1,66 @@
+﻿<Window x:Class="WpfSvetovnaUra.DodajKraj"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSvetovnaUra"
+        mc:Ignorable="d"
+        Title="DodajKraj" Height="449.689" Width="322.979" >
+    <Grid Background="AntiqueWhite">
+
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Orientation="Vertical" Grid.Row="0" HorizontalAlignment="Center">
+            <TextBlock Text="Ime Kraja:" FontSize="20" Margin="20"></TextBlock>
+            <TextBox x:Name="ImeKraja"></TextBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Grid.Row="1" HorizontalAlignment="Center">
+            <TextBlock Text="Časovni zamik:" FontSize="20" Margin="20"></TextBlock>
+            <ComboBox x:Name="seznamUr">
+                <ComboBoxItem >-12</ComboBoxItem>
+                <ComboBoxItem >-11</ComboBoxItem>
+                <ComboBoxItem >-10</ComboBoxItem>
+                <ComboBoxItem >-9</ComboBoxItem>
+                <ComboBoxItem >-8</ComboBoxItem>
+                <ComboBoxItem >-7</ComboBoxItem>
+                <ComboBoxItem >-6</ComboBoxItem>
+                <ComboBoxItem >-5</ComboBoxItem>
+                <ComboBoxItem >-4</ComboBoxItem>
+                <ComboBoxItem >-3</ComboBoxItem>
+                <ComboBoxItem >-2</ComboBoxItem>
+                <ComboBoxItem >-1</ComboBoxItem>
+                <ComboBoxItem IsSelected="True">0</ComboBoxItem>
+                <ComboBoxItem >+1</ComboBoxItem>
+                <ComboBoxItem >+2</ComboBoxItem>
+                <ComboBoxItem >+3</ComboBoxItem>
+                <ComboBoxItem >+4</ComboBoxItem>
+                <ComboBoxItem >+5</ComboBoxItem>
+                <ComboBoxItem >+6</ComboBoxItem>
+                <ComboBoxItem >+7</ComboBoxItem>
+                <ComboBoxItem >+8</ComboBoxItem>
+                <ComboBoxItem >+9</ComboBoxItem>
+                <ComboBoxItem >+10</ComboBoxItem>
+                <ComboBoxItem >+11</ComboBoxItem>
+                <ComboBoxItem >+12</ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
+        
+        <StackPanel Orientation="Vertical" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center">
+            <TextBlock Text="Komentar:" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="20" Margin="20"></TextBlock>
+            <TextBox x:Name="KomentarKraja" AcceptsReturn="True" TextWrapping="Wrap" SpellCheck.IsEnabled="True" Language="en-US" Height="28" Width="161"></TextBox>
+        </StackPanel>
+        
+        <Label Grid.Row="3" VerticalAlignment="Bottom" Content="Članica EU: " FontSize="15"/>
+        <RadioButton Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Center"  FontSize="15" Name="ClanicaEUDA" Content="Da"/>
+        <RadioButton Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Right"  FontSize="15" Margin="0,0,20,0" IsChecked="True" Content="Ne"/>
+        <Button Content="Dodaj" FontSize="20" Grid.Row="4" Width="90" Height="40" RenderTransformOrigin="0.501,0.5" Click="Button_Click" IsDefault="True"/>
+    </Grid>
+</Window>

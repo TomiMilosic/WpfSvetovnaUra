@@ -1,0 +1,42 @@
+﻿<Window x:Class="WpfSvetovnaUra.DodajOseboForma"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSvetovnaUra"
+        mc:Ignorable="d"
+        Title="DodajOseboForma" Height="450" Width="800">
+    <Grid Background="AntiqueWhite">
+        <Grid.RowDefinitions>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.5*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0">Ime:</Label>
+        <TextBox x:Name="Imetb" Grid.Row="0" Grid.Column="0" Margin="5,55,0,54.636"  Padding="5" Height="30" Width="257"  HorizontalAlignment="Left"></TextBox>
+
+        <Label Grid.Row="1" Grid.Column="0">Priimek</Label>
+        <TextBox x:Name="priimektb" Grid.Row="1" Grid.Column="0" Margin="5,55.364,0,55.145"  Padding="5" Height="30" Width="257"  HorizontalAlignment="Left"></TextBox>
+
+        <Label Grid.Row="2" Grid.Column="0">Telefonska</Label>
+        <TextBox x:Name="telefonskatb" Grid.Row="2" Grid.Column="0" Margin="5,54.982,0,54.655"  Padding="5" Height="30" Width="257"  HorizontalAlignment="Left"></TextBox>
+
+        <Label Grid.Row="0" Grid.Column="1">Opombe:</Label>
+        <TextBox x:Name="opombetb" Grid.Row="0" Grid.Column="1" Margin="5"  Padding="5" Height="30" Width="180"   HorizontalAlignment="Left"></TextBox>
+
+        <Label Grid.Row="1" Grid.Column="1">Na voljo:</Label>
+        
+       
+        <TextBox x:Name="navoljotb1" Height="30" Width="150" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" ></TextBox>
+        <TextBox x:Name="navoljotb2" Height="30" Width="150" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,10,0"></TextBox>
+
+        <Button Grid.Row="2" Grid.Column="1" Content="Dodaj/Uredi" Height="30" Width="100" VerticalAlignment="Top" HorizontalAlignment="Left" Click="Button_Click_1" ></Button>
+        <Button Grid.Row="2" Grid.Column="1" Content="Prekliči"  Margin="0,0,10,0" Height="30" Width="100" VerticalAlignment="Top" HorizontalAlignment="Right" Click="Button_Click" ></Button>
+
+    </Grid>
+</Window>

@@ -1,0 +1,2575 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>XAct.IO.FileSystemWatcher</name>
+    </assembly>
+    <members>
+        <member name="T:XAct.IO.ArchivingAction">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:XAct.IO.ArchivingAction.Undefined">
+            <summary>
+            The action is undefined. This is an error state.
+            <para>
+            Value=0
+            </para>
+            </summary>
+        </member>
+        <member name="F:XAct.IO.ArchivingAction.NoAction">
+            <summary>
+            Files are left to accumulate in the folder.
+            <para>
+            Value=2
+            </para>
+            </summary>
+        </member>
+        <member name="F:XAct.IO.ArchivingAction.Move">
+            <summary>
+            Files are archived to another directory after a delay.
+            <para>
+            Value=3
+            </para>
+            </summary>
+        </member>
+        <member name="F:XAct.IO.ArchivingAction.Delete">
+            <summary>
+            Files are deleted from the folder after a delay.
+            <para>
+            Value=4
+            </para>
+            </summary>
+        </member>
+        <member name="T:XAct.IO.DirectoryArchiver">
+            <summary>
+            Inmplementation of <see cref="T:XAct.IO.IDirectoryArchiver"/>,
+            created by <see cref="T:XAct.IO.IDirectoryArchivingService"/>
+            from values provided using <see cref="T:XAct.IO.IDirectoryArchiverConfiguration"/>
+            </summary>
+        </member>
+        <member name="P:XAct.IO.DirectoryArchiver.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:XAct.IO.DirectoryArchiver"/> is enabled.
+            <para>
+            Default is <c>Enabled</c> (although <see cref="P:XAct.IO.DirectoryArchiver.ArchiveAction"/> is NoAction).
+            </para>
+            </summary>
+            <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:XAct.IO.DirectoryArchiver.Name">
+            <summary>
+            Gets or sets the unique name of this <see cref="T:XAct.IO.IDirectoryArchiver"/>.
+            <para>
+            The name will be used as the key within the <see cref="T:XAct.IO.IDirectoryArchivingServiceState"/>
+            </para>
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:XAct.IO.DirectoryArchiver.Directory">
+            <summary>
+            Gets the path of the file to watch.
+            <para>
+            Default is <c>null</c>
+            	</para>
+            </summary>
+            <value>The path.</value>
+        </member>
+        <member name="P:XAct.IO.DirectoryArchiver.ArchiveDelay">
+            <summary>
+            Gets or sets how old a file has to be before it is archived.
+            <para>
+            The default is <c>14</c> days.
+            </para>
+            </summary>
+            <value>The delay.</value>
+        </member>
+        <member name="P:XAct.IO.DirectoryArchiver.ArchiveAction">
+            <summary>
+            Gets or sets the archiving action to take (Move, Delete, etc).
+            <para>
+            The default is <c>NoAction</c>
+            	</para>
+            </summary>
+            <value>The action.</value>
+        </member>
+        <member name="P:XAct.IO.DirectoryArchiver.FileInfoDateType">
+            <summary>
+            Gets or sets the file attribute to use (FileCreated, LastAccessed, LastWritten)
+            when determining if the <see cref="P:XAct.IO.DirectoryArchiver.ArchiveDelay"/> has passed.
+            <para>
+            The default is FileCreationDate.
+            </para>
+            </summary>
+            <value>The file info date source.</value>
+        </member>
+        <member name="P:XAct.IO.DirectoryArchiver.ArchviveToDirectory">
+            <summary>
+            Gets or sets the directory to move the file to (if the <see cref="P:XAct.IO.DirectoryArchiver.ArchiveAction"/> is Move).
+            <para>
+            The default is null.
+            </para>
+            </summary>
+            <value>The move to directory.</value>
+        </member>
+        <member name="P:XAct.IO.DirectoryArchiver.CheckInterval">
+            <summary>
+            Gets or sets the interval in between checks.
+            <para>
+            The default is <c>30</c> minutes.
+            </para>
+            </summary>
+            <value>The check interval.</value>
+        </member>
+        <member name="M:XAct.IO.DirectoryArchiver.#ctor(XAct.Diagnostics.ITracingService,XAct.IO.IIOService,XAct.IO.IDirectoryArchiverConfiguration)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.DirectoryArchiver" /> class.
+            </summary>
+            <param name="tracingService">The tracing service.</param>
+            <param name="directoryArchivingConfiguration">The directory archiving configuration.</param>
+            <param name="ioService">The io service.</param>
+        </member>
+        <member name="T:XAct.IO.Implementations.DirectoryArchivingServiceState">
+            <summary>
+            An singleton implementation of <see cref="T:XAct.IO.IDirectoryArchivingServiceState"/>
+            backing the <see cref="T:XAct.IO.IDirectoryArchivingService"/>.
+            </summary>
+        </member>
+        <member name="T:XAct.IO.Implementations.DirectoryArchiverConfiguration">
+            <summary>
+            An implementation of the <see cref="T:XAct.IO.IDirectoryArchiverConfiguration"/>
+            contract to provide an argument package from which 
+            the <see cref="T:XAct.IO.IDirectoryArchivingService"/> can build
+            an implementation of <see cref="T:XAct.IO.IDirectoryArchiver"/>.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryArchiverConfiguration.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:XAct.IO.IDirectoryArchiverConfiguration"/> is enabled.
+            <para>
+            The default is <c>true</c> (although <see cref="P:XAct.IO.Implementations.DirectoryArchiverConfiguration.ArchiveAction"/> is NoAction)
+            	</para>
+            </summary>
+            <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryArchiverConfiguration.Name">
+            <summary>
+            Gets or sets the unique name of this <see cref="T:XAct.IO.IDirectoryArchiver"/>.
+            <para>
+            The name will be used as the key within the <see cref="T:XAct.IO.IDirectoryArchivingServiceState"/>
+            </para>
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryArchiverConfiguration.Directory">
+            <summary>
+            Gets or sets the path to periodically scan for archiveable files.
+            <para>
+            The default is <c>null</c>
+            	</para>
+            </summary>
+            <value>The path.</value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryArchiverConfiguration.ArchiveDelay">
+            <summary>
+            Gets or sets how old a file has to be before it is archived.
+            <para>
+            The default is <c>14</c> days.
+            </para>
+            </summary>
+            <value>The delay.</value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryArchiverConfiguration.ArchiveAction">
+            <summary>
+            Gets or sets the archiving action to take (Move, Delete, etc).
+            <para>
+            The default is <c>NoAction</c>
+            	</para>
+            </summary>
+            <value>The action.</value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryArchiverConfiguration.FileInfoDateType">
+            <summary>
+            Gets or sets the file attribute to use (FileCreated, LastAccessed, LastWritten)
+            when determining if the <see cref="P:XAct.IO.Implementations.DirectoryArchiverConfiguration.ArchiveDelay"/> has passed.
+            <para>
+            The default is FileCreationDate.
+            </para>
+            </summary>
+            <value>The file info date source.</value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryArchiverConfiguration.ArchiveMoveToDirectory">
+            <summary>
+            Gets or sets the directory to move the file to (if the <see cref="P:XAct.IO.Implementations.DirectoryArchiverConfiguration.ArchiveAction"/> is Move).
+            <para>
+            The default is null.
+            </para>
+            </summary>
+            <value>The move to directory.</value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryArchiverConfiguration.ArchiveCheckInterval">
+            <summary>
+            Gets or sets the interval in between checks.
+            <para>
+            The default is <c>15</c> minutes.
+            </para>
+            <para>
+            Minimum is 1 minute.
+            </para>
+            </summary>
+            <value>The check interval.</value>
+        </member>
+        <member name="F:XAct.IO.Implementations.DirectoryArchiverConfiguration._checkInterval">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:XAct.IO.Implementations.DirectoryArchiverConfiguration.Initialize(System.Boolean,System.TimeSpan,System.String,System.TimeSpan,XAct.IO.ArchivingAction,System.String,XAct.IO.FileDateType)">
+            <summary>
+            Initializes the specified archive check interval.
+            </summary>
+            <param name="enabled">if set to <c>true</c> [enabled].</param>
+            <param name="archiveCheckInterval">The archive check interval.</param>
+            <param name="directoryFullName">The directory.</param>
+            <param name="archiveDelay">The archive delay.</param>
+            <param name="archiveAction">The archive action.</param>
+            <param name="archiveMoveToDirectory">The archive move to directory.</param>
+            <param name="fileInfoDateType">Type of the file info date.</param>
+        </member>
+        <member name="M:XAct.IO.Implementations.DirectoryArchiverConfiguration.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.Implementations.DirectoryArchiverConfiguration"/> class.
+            </summary>
+        </member>
+        <member name="T:XAct.IO.Implementations.DirectoryArchivingService">
+            <summary>
+            Implementation of <see cref="T:XAct.IO.IDirectoryArchivingService"/>
+            to provide a service to register folder watchers that will
+            periodically scan for files that can be archived.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.Implementations.DirectoryArchivingService.#ctor(XAct.Diagnostics.ITracingService,XAct.IO.IIOService,XAct.IO.IDirectoryArchivingServiceState)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.Implementations.DirectoryArchivingService" /> class.
+            </summary>
+            <param name="tracingService">The tracing service.</param>
+            <param name="ioService">The io service.</param>
+            <param name="directoryArchiverCache">The directory archiver cache.</param>
+        </member>
+        <member name="M:XAct.IO.Implementations.DirectoryArchivingService.Register(XAct.IO.IDirectoryArchiverConfiguration)">
+            <summary>
+            Registers a new Directory watcher, that
+            will periodically scan for old files to archive.
+            </summary>
+            <param name="configuration">The configuration.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XAct.IO.Implementations.DropFolderService">
+            <summary>
+            An implementation of the 
+            <see cref="T:XAct.IO.IDropFolderService"/> to create and register
+            instances of <see cref="T:XAct.IO.IDropFolderWatcher"/>, built according
+            to specs defined in <see cref="T:XAct.IO.IDropFolderSpecifications"/>
+            </summary>
+        </member>
+        <member name="M:XAct.IO.Implementations.DropFolderService.#ctor(XAct.Diagnostics.ITracingService,XAct.Environment.IEnvironmentService,XAct.IO.IIOService,XAct.IO.IDirectoryArchivingService,XAct.IO.IDropFolderWatcherServiceCache)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.Implementations.DropFolderService" /> class.
+            </summary>
+            <param name="tracingService">The tracing service.</param>
+            <param name="environmentService">The environment service.</param>
+            <param name="ioService">The io service.</param>
+            <param name="directoryArchivingService">The directory archiving service.</param>
+            <param name="dropFolderWatcherCache">The file drop watcher cache.</param>
+        </member>
+        <member name="M:XAct.IO.Implementations.DropFolderService.Register(XAct.IO.IDropFolderSpecifications)">
+            <summary>
+            Creates <see cref="T:XAct.IO.IDropFolderWatcher"/> instance according to the 
+            given <paramref name="dropFolderSpecifications"/>,
+            registers it in the global <see cref="T:XAct.IO.IDropFolderWatcherServiceCache"/>,
+            and returns it for the invoker to attach event handlers to.
+            </summary>
+            <param name="dropFolderSpecifications">The file drop specifications.</param>
+            <returns>A instance of <see cref="T:XAct.IO.IDropFolderWatcher"/>.</returns>
+        </member>
+        <member name="M:XAct.IO.Implementations.DropFolderService.Unregister(XAct.IO.IDropFolderWatcher)">
+            <summary>
+            Removes the given <paramref name="dropFolderWatcher"/> from the internal
+            <see cref="T:XAct.IO.IDropFolderWatcherServiceCache"/>.
+            </summary>
+            <param name="dropFolderWatcher">The file drop watcher.</param>
+        </member>
+        <member name="M:XAct.IO.Implementations.DropFolderService.Clear">
+            <summary>
+            Don't use.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.Implementations.DropFolderService.Validate(XAct.IO.IDropFolderSpecifications,System.String[]@)">
+            <summary>
+            Validates the specified file drop specifications (checking whether directories exist, are accessible, etc.)
+            </summary>
+            <param name="dropFolderSpecifications">The file drop specifications.</param>
+            <param name="errorMessages">The error messages.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XAct.IO.Implementations.DropFolderWatcherServiceSharedCache">
+            <summary>
+            An implementation of <see cref="T:XAct.IO.IDropFolderWatcherServiceCache"/>
+            to provide a singleton cache backing <see cref="T:XAct.IO.IDropFolderService"/>
+            </summary>
+        </member>
+        <member name="T:XAct.IO.Implementations.DirectoryWatcherServiceState">
+            <summary>
+            An implementation of <see cref="T:XAct.IO.IDirectoryWatcherServiceState"/>
+            to keep track of <see cref="T:XAct.IO.IDirectoryWatcher"/> objects
+            created by an implementation of <see cref="T:XAct.IO.IDirectoryWatcherService"/>.
+            </summary>
+        </member>
+        <member name="T:XAct.IO.Implementations.DirectoryWatcherConfiguration">
+            <summary>
+            COnfiguration settings required
+            by <see cref="T:XAct.IO.IDirectoryWatcherService"/>
+            to Factory up a <see cref="T:XAct.IO.FileSystemDirectoryWatcher"/>
+            in order to watch a file drop folder (or other).
+            </summary>
+            <remarks>
+            <para>
+            This could be taken a bit further by:
+            http://www.codeproject.com/Articles/58740/FileSystemWatcher-Pure-Chaos-Part-1-of-2
+            </para>
+            <para>
+            But that's a lot of watchers just for change events...
+            </para>
+            <para>
+            Note that the polling mechanism he is using is just to ensure the
+            FileWatcher doesn't fail. 
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.Name">
+            <summary>
+            Gets the name of the object.
+            <para>Member defined in<see cref="T:XAct.IHasName"/></para>
+            </summary>
+            <value>The name.</value>
+            <internal>8/13/2011: Sky</internal>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.Tag">
+            <summary>
+            Gets an optional tag of the object.
+            <para>Can be used to attach any type of text information to the watcher.</para>
+            <para>Member defined in<see cref="T:XAct.IHasTag"/></para>
+            </summary>
+            <value>The name.</value>
+            <internal>8/13/2011: Sky</internal>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.Method">
+            <summary>
+            Gets or sets the method to use to spot changes.
+            <para>
+            Default is: <see cref="F:XAct.IO.FileSystemWatcherMethod.FileSystemWatcher"/> 
+            </para>
+            </summary>
+            <value>The method.</value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.PollingInterval">
+            <summary>
+            Gets or sets the polling interval (applied only if <see cref="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.Method"/> is set to Polling).
+            </summary>
+            <value>The polling interval.</value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.Enabled">
+            <summary>
+            Gets or sets a value indicating whether the
+            scanning is active or not.
+            <para>
+            Default is <c>true</c>.
+            </para>
+            </summary>
+            <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.Path">
+            <summary>
+            The folder/directory path to be watched.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.Filter">
+            <summary>
+            The filename filter to be watched for (eg: '*.doc').
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.Excluded">
+            <summary>
+            An optional list files to be excluded
+            beyond what was <see cref="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.Filter"/>ed out
+            (eg: '*.tmp.doc')
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.IncludeSubDirectories">
+            <summary>
+            Gets or sets a value indicating whether
+            to include changes within sub directories.
+            <para>
+            Default is true.
+            </para>
+            </summary>
+            <value>
+            	<c>true</c> if [include sub directories]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.FireDirectoryChangeEventsAsWell">
+            <summary>
+            Gets or sets a value indicating whether to
+            fire for Directory change events as well.
+            Most times you will be looking for File events only.
+            <para>
+            Default is false.
+            </para>
+            </summary>
+            <value>
+            	<c>true</c> if [fire directory change events as well]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.ChangeFilters">
+            <summary>
+            Gets or sets the change events to watch for.
+            (FileName, DirectoryName, Attributes,Size, LastWrite,LastAccess, CreationTime, Security)
+            <para>
+            Default is <c>NotifyFilters.LastWrite | NotifyFilters.FileName</c>
+            </para>
+            <para>
+            Note: Ignored when <see cref="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.Method"/> is Polling.
+            </para>
+            </summary>
+            <value>
+            The change filters.
+            </value>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherConfiguration.WatcherChangeTypes">
+            <summary>
+            Gets or sets the watcher events to watch for.
+            (Created, Deleted, Changed, Renamed,All)
+            <para>
+            Default is <see cref="F:System.IO.WatcherChangeTypes.Created"/>
+            (in order to produce less chatter, and not overflow the 64K buffer. A known issue with FileSystemWatcher).
+            </para>
+            </summary>
+            <value>
+            The watcher change types.
+            </value>
+        </member>
+        <member name="M:XAct.IO.Implementations.DirectoryWatcherConfiguration.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.Implementations.DirectoryWatcherConfiguration"/> class.
+            </summary>
+        </member>
+        <member name="T:XAct.IO.Implementations.DirectoryWatcherService">
+            <summary>
+            Implementation of <see cref="T:XAct.IO.IDirectoryWatcherService"/>
+            </summary>
+        </member>
+        <member name="P:XAct.IO.Implementations.DirectoryWatcherService.State">
+            <summary>
+            List of file watchers:
+            </summary>
+        </member>
+        <member name="M:XAct.IO.Implementations.DirectoryWatcherService.#ctor(XAct.Diagnostics.ITracingService,XAct.IO.IIOService,XAct.IO.IDirectoryWatcherServiceState)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.Implementations.DirectoryWatcherService" /> class.
+            </summary>
+            <param name="tracingService">The tracing service.</param>
+            <param name="ioService">The io service.</param>
+            <param name="fileSystemDirectoryWatcherState">The file system directory watcher cache.</param>
+        </member>
+        <member name="M:XAct.IO.Implementations.DirectoryWatcherService.Clear">
+            <summary>
+            Disables and clears all registered FileSystemDirectoryWatchers.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.Implementations.DirectoryWatcherService.Register(XAct.IO.IDirectoryWatcherConfiguration)">
+            <summary>
+            Sets up a <see cref="T:XAct.IO.FileSystemDirectoryWatcher"/>
+            to monitor a directory or file according to the specs
+            given in <paramref name="watcherInstanceConfiguration"/>
+            </summary>
+            <param name="watcherInstanceConfiguration">The watcher instance configuration.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.Implementations.DirectoryWatcherService.Remove(XAct.IO.IDirectoryWatcher)">
+            <summary>
+            Removes the specified <see cref="T:XAct.IO.IDirectoryWatcher"/> from the <see cref="T:XAct.IO.IDirectoryWatcherServiceState"/>
+            after Disabling it.
+            </summary>
+            <param name="fileSystemDirectoryWatcherInstance">The file system directory watcher instance.</param>
+        </member>
+        <member name="T:XAct.IO.IDirectoryArchiver">
+            <summary>
+            Contract for an object created by <see cref="T:XAct.IO.IDirectoryArchivingService"/>
+            from a <see cref="T:XAct.IO.IDirectoryArchiverConfiguration"/>
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiver.Directory">
+            <summary>
+            Gets the path of the file to watch.
+            <para>
+            Default is <c>null</c>
+            </para>
+            </summary>
+            <value>The path.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiver.CheckInterval">
+            <summary>
+            Gets or sets the interval in between checks.
+            <para>
+            The default is <c>30</c> minutes.
+            </para>
+            </summary>
+            <value>The check interval.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiver.ArchiveDelay">
+            <summary>
+            Gets or sets how old a file has to be before it is archived.
+            <para>
+            The default is <c>14</c> days.
+            </para>
+            </summary>
+            <value>The delay.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiver.ArchiveAction">
+            <summary>
+            Gets or sets the archiving action to take (Move, Delete, etc).
+            <para>
+            The default is <c>NoAction</c>
+            </para>
+            </summary>
+            <value>The action.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiver.FileInfoDateType">
+            <summary>
+            Gets or sets the file attribute to use (FileCreated, LastAccessed, LastWritten)
+            when determining if the <see cref="P:XAct.IO.IDirectoryArchiver.ArchiveDelay"/> has passed.
+            <para>
+            The default is FileCreationDate.
+            </para>
+            </summary>
+            <value>The file info date source.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiver.ArchviveToDirectory">
+            <summary>
+            Gets or sets the directory to move the file to (if the <see cref="P:XAct.IO.IDirectoryArchiver.ArchiveAction"/> is Move).
+            <para>
+            The default is null.
+            </para>
+            </summary>
+            <value>The move to directory.</value>
+        </member>
+        <member name="T:XAct.IO.IDirectoryArchivingServiceState">
+            <summary>
+            Contract for a singleton cache of the instantiates of <see cref="T:XAct.IO.IDirectoryArchiver"/>
+            registered with <see cref="T:XAct.IO.IDirectoryArchivingService"/>
+            </summary>
+        </member>
+        <member name="T:XAct.IO.IDirectoryArchiverConfiguration">
+            <summary>
+            The contract for the configation to use when creating 
+            an instance derived from <see cref="T:XAct.IO.IDirectoryArchiver"/>.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiverConfiguration.ArchiveCheckInterval">
+            <summary>
+            Gets or sets the interval in between checks.
+            <para>
+            The default is <c>30</c> minutes.
+            </para>
+            <para>
+            Minimum is <c>15</c> minutes.
+            </para>
+            </summary>
+            <value>The check interval.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiverConfiguration.Directory">
+            <summary>
+            Gets or sets the path to periodically scan for archiveable files.
+            <para>
+            The default is <c>null</c>
+            </para>
+            </summary>
+            <value>The path.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiverConfiguration.ArchiveDelay">
+            <summary>
+            Gets or sets how old a file has to be before it is archived.
+            <para>
+            The default is <c>14</c> days.
+            </para>
+            </summary>
+            <value>The delay.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiverConfiguration.ArchiveAction">
+            <summary>
+            Gets or sets the archiving action to take (Move, Delete, etc).
+            <para>
+            The default is <c>NoAction</c>
+            </para>
+            </summary>
+            <value>The action.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiverConfiguration.ArchiveMoveToDirectory">
+            <summary>
+            Gets or sets the directory to move the file to (if the <see cref="P:XAct.IO.IDirectoryArchiverConfiguration.ArchiveAction"/> is Move).
+            <para>
+            The default is null.
+            </para>
+            </summary>
+            <value>The move to directory.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryArchiverConfiguration.FileInfoDateType">
+            <summary>
+            Gets or sets the file attribute to use (FileCreated, LastAccessed, LastWritten)
+            when determining if the <see cref="P:XAct.IO.IDirectoryArchiverConfiguration.ArchiveDelay"/> has passed.
+            <para>
+            The default is FileCreationDate.
+            </para>
+            </summary>
+            <value>The file info date source.</value>
+        </member>
+        <member name="M:XAct.IO.IDirectoryArchiverConfiguration.Initialize(System.Boolean,System.TimeSpan,System.String,System.TimeSpan,XAct.IO.ArchivingAction,System.String,XAct.IO.FileDateType)">
+            <summary>
+            Initializes the specified archive check interval.
+            </summary>
+            <param name="enabled">if set to <c>true</c> [enabled].</param>
+            <param name="archiveCheckInterval">The archive check interval.</param>
+            <param name="directoryFullName">The directory.</param>
+            <param name="archiveDelay">The archive delay.</param>
+            <param name="archiveAction">The archive action.</param>
+            <param name="archiveMoveToDirectory">The archive move to directory.</param>
+            <param name="fileInfoDateType">Type of the file info date.</param>
+        </member>
+        <member name="T:XAct.IO.IDirectoryArchivingService">
+            <summary>
+            A service to manage the automatic archiving of files in a folder.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.IDirectoryArchivingService.Register(XAct.IO.IDirectoryArchiverConfiguration)">
+            <summary>
+            Registers a new Directory watcher, that 
+            will periodically scan for old files to archive.
+            </summary>
+            <param name="configuration">The configuration.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XAct.IO.DropFolderStrategyState">
+            <summary>
+            A flag indicating whether to implement an archive or error strategy or not.
+            </summary>
+        </member>
+        <member name="F:XAct.IO.DropFolderStrategyState.Unspecified">
+            <summary>
+            No value was set (this is an error state).
+            <value>Value=0</value>
+            </summary>
+        </member>
+        <member name="F:XAct.IO.DropFolderStrategyState.Inherit">
+            <summary>
+            Inherit the state from a lower configuration.
+            <value>Value=1</value>
+            </summary>
+        </member>
+        <member name="F:XAct.IO.DropFolderStrategyState.Enabled">
+            <summary>
+            Enabled
+            </summary>
+        </member>
+        <member name="F:XAct.IO.DropFolderStrategyState.Disabled">
+            <summary>
+            Disabled.
+            <value>Value=1</value>
+            </summary>
+        </member>
+        <member name="T:XAct.IO.DropFolderResultStrategySpecification">
+            <summary>
+            A common absract base class for Success/Error strategies.
+            </summary>
+            <remarks>
+            If using a config file to specify settings, the values
+            will come from parsing something similar to the following:
+            <![CDATA[
+            <dropFolderSettings>
+            <dropFolders>
+            <dropFolder Directory="...">
+            <successStrategy directory="...\Sales\Success" archiveAction="Delete" archiveDelay="14,0,0,0"  />
+            <errorStrategy  directory="...\Sales\Error" archiveAction="Move" archiveDelay="14,0,0,0"  archiveDirectory="...\Common\Error" />
+            </dropFolder>
+            <dropFolder Directory="..."/>
+            </dropFolders>
+            <successStrategy directory="...\Common\Success" archiveAction="Delete" archiveDelay="14,0,0,0" />
+            <errorStrategy  directory="...\Common\Error" archiveAction="Delete" archiveDelay="14,0,0,0"   />
+            </dropFolderSettings>
+            ]]>
+            </remarks>
+        </member>
+        <member name="P:XAct.IO.DropFolderResultStrategySpecification.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this 
+            <see cref="T:XAct.IO.DropFolderResultStrategySpecification"/> is enabled.
+            <para>Default is <c>true</c> (although default <see cref="T:System.Action"/>
+            is NoAction).
+            </para>
+            </summary>
+            <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderResultStrategySpecification.Directory">
+            <summary>
+            Gets or sets the directory to move the files to.
+            <para>Default is null.</para>
+            </summary>
+            <value>The directory.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderResultStrategySpecification.ArchiveCheckInterval">
+            <summary>
+            Gets or sets the delay before files the <see cref="P:XAct.IO.DropFolderResultStrategySpecification.ArchiveAction"/> (Move or Delete)
+            is taken.
+            <para>
+            Default is <c>15</c> minutes.
+            </para>
+            </summary>
+            <value>The delay.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderResultStrategySpecification.ArchiveDelay">
+            <summary>
+            Gets or sets the delay before files the <see cref="P:XAct.IO.DropFolderResultStrategySpecification.ArchiveAction"/> (Move or Delete)
+            is taken.
+            <para>
+            Default is 14 days.
+            </para>
+            </summary>
+            <value>The delay.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderResultStrategySpecification.ArchiveAction">
+            <summary>
+            Gets or sets the archiving strategy to use on the associated drop folder.
+            <para>
+            Default value is <c>NoAction</c>.
+            </para>
+            </summary>
+            <value>The action.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderResultStrategySpecification.ArchiveMoveTo">
+            <summary>
+            If <see cref="P:XAct.IO.DropFolderResultStrategySpecification.ArchiveAction"/> is set to <c>Move</c>,
+            moves the file to this directory
+            after the <see cref="P:XAct.IO.DropFolderResultStrategySpecification.ArchiveDelay"/>
+            <para>
+            Default value = null
+            </para>
+            </summary>
+        </member>
+        <member name="P:XAct.IO.DropFolderResultStrategySpecification.ArchiveFileDateType">
+            <summary>
+            Gets the type of the file date.
+            </summary>
+            <value>
+            The type of the file date.
+            </value>
+        </member>
+        <member name="M:XAct.IO.DropFolderResultStrategySpecification.#ctor">
+            <summary>
+            Initializes a new instance of the 
+            <see cref="T:XAct.IO.DropFolderResultStrategySpecification"/> class.
+            </summary>
+        </member>
+        <member name="T:XAct.IO.DropFolderEventArgs">
+            <summary>
+            Argument package for the event raised by the 
+            <see cref="T:XAct.IO.IDropFolderWatcher"/> when a new file is ready to be processed.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.DropFolderEventArgs.Exception">
+            <summary>
+            Gets or sets a value indicating whether the event handler encountered errors.
+            </summary>
+            <value>
+            	<c>true</c> if this instance has errors; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:XAct.IO.DropFolderEventArgs.#ctor(System.IO.FileSystemEventArgs)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.DropFolderEventArgs"/> class.
+            </summary>
+            <param name="dropFolderEventArgs">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="T:XAct.IO.IDropFolderWatcher">
+            <summary>
+            Contract for DropFolderWatcher instances created by the
+            <see cref="T:XAct.IO.IDropFolderService"/> in order to watch
+            the files specified using a <see cref="T:XAct.IO.DropFolderSpecifications"/>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.IDropFolderWatcher.NewFile">
+            <summary>
+            Occurs when [new file].
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDropFolderWatcher.Specs">
+            <summary>
+            Gets the specs defined when <see cref="M:XAct.IO.IDropFolderWatcher.Initialize(XAct.IO.IDropFolderSpecifications)"/> 
+            was invoked.
+            </summary>
+            <value>
+            The specs.
+            </value>
+        </member>
+        <member name="M:XAct.IO.IDropFolderWatcher.Initialize(XAct.IO.IDropFolderSpecifications)">
+            <summary>
+            Initializes the <see cref="T:XAct.IO.IDropFolderWatcher"/>
+            using the specs defined in the given <see cref="T:XAct.IO.IDropFolderSpecifications"/>
+            </summary>
+            <param name="dropFolderSpecifications">The file drop specifications.</param>
+        </member>
+        <member name="T:XAct.IO.IDropFolderWatcherServiceCache">
+            <summary>
+            Contract for a global cache of <see cref="T:XAct.IO.IDropFolderWatcher"/>
+            instances instantiated by <see cref="T:XAct.IO.IDropFolderService"/>
+            </summary>
+        </member>
+        <member name="T:XAct.IO.IDropFolderService">
+            <summary>
+            Contract for a service to create, register, and manage a 
+            <see cref="T:XAct.IO.IDropFolderWatcher"/> instance.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.IDropFolderService.Register(XAct.IO.IDropFolderSpecifications)">
+            <summary>
+            Creates <see cref="T:XAct.IO.IDropFolderWatcher"/> instance according to the 
+            given <paramref name="dropFolderSpecifications"/>,
+            registers it in the global <see cref="T:XAct.IO.IDropFolderWatcherServiceCache"/>,
+            and returns it for the invoke to attach event handlers to.
+            </summary>
+            <param name="dropFolderSpecifications">The file drop specifications.</param>
+            <returns>A instance of <see cref="T:XAct.IO.IDropFolderWatcher"/>.</returns>
+        </member>
+        <member name="M:XAct.IO.IDropFolderService.Unregister(XAct.IO.IDropFolderWatcher)">
+            <summary>
+            Removes the given <paramref name="dropFolderWatcher"/> from the internal
+            <see cref="T:XAct.IO.IDropFolderWatcherServiceCache"/>.
+            </summary>
+            <param name="dropFolderWatcher">The file drop watcher.</param>
+        </member>
+        <member name="M:XAct.IO.IDropFolderService.Clear">
+            <summary>
+            Unregister all.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.IDropFolderService.Validate(XAct.IO.IDropFolderSpecifications,System.String[]@)">
+            <summary>
+            Validates the specified file drop specifications.
+            </summary>
+            <param name="dropFolderSpecifications">The file drop specifications.</param>
+            <param name="errorMessages">The error messages.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XAct.IO.DropFolderDirectorySpecification">
+            <summary>
+            Element created by a Configuration Service of some kind,
+            as a element within the <see cref="P:XAct.IO.DropFolderSpecifications.Directories"/>
+            collection.
+            </summary>
+            <remarks>
+            <para>
+            If using a config file to specify settings, the values
+            will come from parsing something similar to the following:
+            <![CDATA[
+            <dropFolderSettings>
+              <dropFolders>
+                <dropFolder Directory="...">
+                  <successStrategy enabled="Enabled" delay="0,0,1" directory="..."/>
+                  <errorStrategy enabled="Enabled" directory="..."/>
+                </dropFolder>
+                <dropFolder Directory="..."/>
+              </dropFolders>
+              <successStrategy enabled="Enabled" delay="0,0,1" directory="..."/>
+              <errorStrategy enabled="Enabled" directory="..."/>
+            </dropFolderSettings>
+            ]]>
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XAct.IO.DropFolderDirectorySpecification.Name">
+            <summary>
+            Gets the unique name of the specification within it's collection.
+            <para>Member defined in<see cref="T:XAct.IHasName"/></para>
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderDirectorySpecification.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this object is enabled.
+            <para>
+            Default is <c>true</c>
+            </para>
+            </summary>
+            <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderDirectorySpecification.Tag">
+            <summary>
+            Gets the custom Tag of the object.
+            <para>Member defined in<see cref="T:XAct.IHasTag"/></para>
+            </summary>
+            <value>The name.</value>
+            <internal>8/13/2011: Sky</internal>
+        </member>
+        <member name="P:XAct.IO.DropFolderDirectorySpecification.IncludeSubDirectories">
+            <summary>
+            Gets or sets a value indicating whether to include events from sub directories.
+            <para>
+            CAUTION:
+            Default value is <c>False</c> so that if Archive and Error folders are 
+            nested (per Directory specification), there isn't a recursive loop.
+            </para>
+            </summary>
+            <value>
+            	<c>true</c> if [include sub directories]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.DropFolderDirectorySpecification.Directory">
+            <summary>
+            Gets or sets the path of the folder to watch.
+            <para>
+            The path can be local or remote.
+            <code>
+            "\\serverXYZ\sharedFolder\"
+            </code>
+            </para>
+            </summary>
+            <value>The path to the folder to watch.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderDirectorySpecification.SuccessStrategy">
+            <summary>
+            Gets or sets settings as to where to archive dropped files,
+            as well when to remove them.
+            </summary>
+            <remarks>
+            <remarks>
+            <para>
+            If using a config file to specify settings, the values
+            will come from parsing something similar to the following:
+            <![CDATA[
+            <dropFolderSettings>
+              <dropFolders>
+                <dropFolder Directory="...">
+                  <successStrategy Enabled="Enabled" delay="0,0,1" directory="..."/>
+                  <errorStrategy Enabled="Enabled" directory="..."/>
+                </dropFolder>
+                <dropFolder Directory="..."/>
+              </dropFolders>
+              <successStrategy enabled="true" delay="0,0,1" directory="..."/>
+              <errorStrategy enabled="true" directory="..."/>
+            </dropFolderSettings>
+            ]]>
+            </para>
+            </remarks>
+            </remarks>
+            <value>The archive specs.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderDirectorySpecification.ErrorStrategy">
+            <summary>
+            Gets or sets the (optional) error folder to move documents (when possible)
+            to when there was an error.
+            <para>
+            The path can be local or remote.
+            <code>
+            "\\serverXYZ\sharedFolder\error\"
+            </code>
+            </para>
+            </summary>
+            <value>The error folder.</value>
+        </member>
+        <member name="M:XAct.IO.DropFolderDirectorySpecification.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.DropFolderDirectorySpecification"/> class.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.DropFolderDirectorySpecification.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> that represents this instance.
+            </returns>
+        </member>
+        <member name="T:XAct.IO.DropFolderSpecifications">
+            <summary>
+            Specifications needed by the <see cref="T:XAct.IO.IDropFolderService"/>
+            to watch and process a set of directories for new files.
+            </summary>
+            <remarks>
+            <para>
+            If using a config file to specify settings, the values
+            will come from parsing something similar to the following:
+            <![CDATA[
+            <dropFolderSettings>
+              <dropFolders>
+                <dropFolder Directory="...">
+                  <successStrategy enabled="true" delay="0,0,1" directory="..."/>
+                  <errorStrategy enabled="true" directory="..."/>
+                </dropFolder>
+                <dropFolder Directory="..."/>
+              </dropFolders>
+              <successStrategy enabled="true" delay="0,0,1" directory="..."/>
+              <errorStrategy enabled="true" directory="..."/>
+            </dropFolderSettings>
+            ]]>
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XAct.IO.DropFolderSpecifications.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this object is enabled.
+            <para>
+            The default state is enabled.
+            </para>
+            </summary>
+            <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderSpecifications.EventDelay">
+            <summary>
+            Gets or sets the delay between receiving the event, and raising
+            it for custom handling (can be used to handle closing down of
+            incoming threads (eg: from scanner) that may not have finished writing).
+            <para>
+            Default value is <c>100ms</c>.
+            </para>
+            </summary>
+            <value>
+            The delay.
+            </value>
+        </member>
+        <member name="P:XAct.IO.DropFolderSpecifications.EventTimeout">
+            <summary>
+            Gets or sets the amount of time to wait before
+            giving up getting exclusive access to the file.
+            </summary>
+            <value>
+            The event timeout.
+            </value>
+        </member>
+        <member name="P:XAct.IO.DropFolderSpecifications.Tag">
+            <summary>
+            Gets the tag of the object. Useful to distinguish between processes
+            in a High Availability scenario, when two processes are looking at the same directory.
+            </summary>
+            <internal>8/13/2011: Sky</internal>
+        </member>
+        <member name="P:XAct.IO.DropFolderSpecifications.Directories">
+            <summary>
+            Gets or sets the collection of drop folder directories to watch.
+            </summary>
+            <value>The directories.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderSpecifications.SuccessStrategy">
+            <summary>
+            Gets or sets the (optional) success folder to move documents to (when possible)
+            upon success.
+            <para>
+            The path can be local or remote.
+            <code>
+            "\\serverXYZ\sharedFolder\success\"
+            </code>
+            </para>
+            </summary>
+            <value>The success folder.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderSpecifications.ErrorStrategy">
+            <summary>
+            Gets or sets the (optional) error folder to move documents (when possible)
+            to when there was an error.
+            <para>
+            The path can be local or remote.
+            <code>
+            "\\serverXYZ\sharedFolder\error\"
+            </code>
+            </para>
+            </summary>
+            <value>The error folder.</value>
+        </member>
+        <member name="M:XAct.IO.DropFolderSpecifications.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.DropFolderSpecifications"/> class.
+            </summary>
+        </member>
+        <member name="T:XAct.IO.DropFolderWatcher">
+            <summary>
+            An implementation of the <see cref="T:XAct.IO.IDropFolderWatcher"/>
+            contract for DropFolderWatcher instances created by the
+            <see cref="T:XAct.IO.IDropFolderService"/>.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.DropFolderWatcher.NewFile">
+            <summary>
+            Occurs when a new file has been created in the drop folder.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.DropFolderWatcher.Specs">
+            <summary>
+            The specifications that define the collections of folders this 
+            watcher is responsible for watching, the archiving strategy,
+            and error strategy.
+            <para>
+            Set using the <see cref="M:XAct.IO.DropFolderWatcher.Initialize(XAct.IO.IDropFolderSpecifications)"/> method.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XAct.IO.DropFolderWatcher.#ctor(XAct.Diagnostics.ITracingService,XAct.Environment.IDateTimeService,XAct.Environment.IEnvironmentService,XAct.IO.IIOService,XAct.IO.IDirectoryWatcherService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.DropFolderWatcher"/> class.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.DropFolderWatcher.Initialize(XAct.IO.IDropFolderSpecifications)">
+            <summary>
+            Initializes the <see cref="T:XAct.IO.IDropFolderWatcher"/>
+            using the specs defined in the given <see cref="T:XAct.IO.IDropFolderSpecifications"/>
+            </summary>
+            <param name="dropFolderSpecifications">The file drop specifications.</param>
+        </member>
+        <member name="M:XAct.IO.DropFolderWatcher.CreateFileSystemWatcher(XAct.IO.DropFolderDirectorySpecification)">
+            <summary>
+            Create a <see cref="T:XAct.IO.IDirectoryWatcher"/> instance
+            configured in the way a file drop would need it (ie, just the Create event, really, and no subdirectories).
+            </summary>
+            <param name="dropFolderDirectorySpecification"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.DropFolderWatcher.FileSystemWatcherFileCreated(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Event handler for the filewatcher:
+            </summary>
+            <param name="sender"></param>
+            <param name="eventArgs"></param>
+        </member>
+        <member name="M:XAct.IO.DropFolderWatcher.WaitCallbackCustomHandler(System.Object)">
+            <summary>
+            Called when a new file is found in the drop folder.
+            </summary>
+            <param name="a">The args.</param>
+        </member>
+        <member name="M:XAct.IO.DropFolderWatcher.WaitCallbackCustomHandler(XAct.IO.DropFolderWatcher.WaitCallbackCustomeState)">
+            <summary>
+            Typed callback
+            </summary>
+            <param name="args">The args.</param>
+        </member>
+        <member name="T:XAct.IO.DropFolderWatcher.WaitCallbackCustomeState">
+            <summary>
+            Arg package for the thread:
+            </summary>
+        </member>
+        <member name="P:XAct.IO.DropFolderWatcher.WaitCallbackCustomeState.Watcher">
+            <summary>
+            Gets or sets the watcher.
+            </summary>
+            <value>The watcher.</value>
+        </member>
+        <member name="P:XAct.IO.DropFolderWatcher.WaitCallbackCustomeState.EventArgs">
+            <summary>
+            Gets or sets the event args.
+            </summary>
+            <value>The event args.</value>
+        </member>
+        <member name="T:XAct.IO.IDropFolderSpecifications">
+            <summary>
+            Contract for the specification of a a <see cref="T:XAct.IO.DropFolderWatcher"/> instance.
+            <para>
+            Used to pass to <see cref="T:XAct.IO.IDropFolderService"/> in order for it
+            to create, register, and return a <see cref="T:XAct.IO.IDropFolderWatcher"/>
+            </para>
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDropFolderSpecifications.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this object is enabled.
+            <para>
+            The default state is enabled.
+            </para>
+            </summary>
+            <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderSpecifications.EventDelay">
+            <summary>
+            Gets or sets the delay between receiving the event, and raising
+            it for custom handling (can be used to handle closing down of
+            incoming threads (eg: from scanner) that may not have finished writing).
+            <para>
+            Default value is <c>100ms</c>.
+            </para>
+            </summary>
+            <value>
+            The delay.
+            </value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderSpecifications.EventTimeout">
+            <summary>
+            Gets or sets the amount of time to wait before 
+            giving up getting exclusive access to the file.
+            </summary>
+            <value>
+            The event timeout.
+            </value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderSpecifications.Directories">
+            <summary>
+            Gets or sets the collection of drop folder directories to watch.
+            </summary>
+            <value>The directories.</value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderSpecifications.SuccessStrategy">
+            <summary>
+            Gets or sets the (optional) folder to archive documents to.
+            <para>
+            The path can be local or remote.
+            <code>
+            "\\serverXYZ\archive\"
+            </code>
+            </para>
+            <para>
+            The default state is disabled, as there is no default directory.
+            </para>
+            </summary>
+            <value>The archive folder.</value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderSpecifications.ErrorStrategy">
+            <summary>
+            Gets or sets the (optional) error folder to move documents (when possible)
+            to when there was an error.
+            <para>
+            The path can be local or remote.
+            <code>
+            "\\serverXYZ\sharedFolder\error\"
+            </code>
+            </para>
+            <para>
+            The default state is disabled, as there is no default directory.
+            </para>
+            </summary>
+            <value>The error folder.</value>
+        </member>
+        <member name="T:XAct.IO.HybridDirectoryWatcher">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:XAct.IO.HybridDirectoryWatcher._targetStillAccessibleTimer">
+            <summary>
+            Timer used to poll whether target directory is still 
+            accessible. If not, destroys current watcher, and builds
+            another when directory rebecomes available (this is a solution
+            to work around a known bug of <see cref="P:XAct.IO.HybridDirectoryWatcher.FileSystemWatcher"/>
+            where if the target dir becomes unaccessible (network failure)
+            FileSystemWatcher doesn't restart when the folder becomes available.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.HybridDirectoryWatcher.Error">
+            <summary>
+            Occurs when a File is Created.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.HybridDirectoryWatcher.Event">
+            <summary>
+            Occurs when a File is Created,Changed,Renamed, or Deleted.
+            <para>
+            Always raised after <see cref="E:XAct.IO.HybridDirectoryWatcher.Created"/>,
+            <see cref="E:XAct.IO.HybridDirectoryWatcher.Changed"/>,
+            <see cref="E:XAct.IO.HybridDirectoryWatcher.Renamed"/>,
+            <see cref="E:XAct.IO.HybridDirectoryWatcher.Deleted"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.HybridDirectoryWatcher.Created">
+            <summary>
+            Occurs when a File is Created.
+            <para>
+            In the case of a Move in the same directory (ie, a Rename)
+            it fires after the <see cref="E:XAct.IO.HybridDirectoryWatcher.Deleted"/>.
+            </para>
+            <para>
+            In the case of a Copy, just <see cref="E:XAct.IO.HybridDirectoryWatcher.Created"/> is fired.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.HybridDirectoryWatcher.Changed">
+            <summary>
+            Occurs when a File is Changed.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.HybridDirectoryWatcher.Renamed">
+            <summary>
+            Occurs when a File is Renamed.
+            <para>
+            Occurs after both <see cref="E:XAct.IO.HybridDirectoryWatcher.Deleted"/> and <see cref="E:XAct.IO.HybridDirectoryWatcher.Created"/> are Fired.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.HybridDirectoryWatcher.Deleted">
+            <summary>
+            Occurs when a File is Deleted.
+            <para>
+            In the case of a Move in the same dir (ie a Rename)
+            it fires before the <see cref="E:XAct.IO.HybridDirectoryWatcher.Created"/>
+            </para>
+            </summary>
+        </member>
+        <member name="P:XAct.IO.HybridDirectoryWatcher.Name">
+            <summary>
+            Gets the name of the object.
+            <para>Member defined in<see cref="T:XAct.IHasName"/></para>
+            </summary>
+            <value>The name.</value>
+            <internal><para>8/13/2011: Sky</para></internal>
+        </member>
+        <member name="P:XAct.IO.HybridDirectoryWatcher.Tag">
+            <summary>
+            Gets the tag of the object.
+            <para>Member defined in<see cref="T:XAct.IHasTag"/></para>
+            </summary>
+            <value>The name.</value>
+            <internal>8/13/2011: Sky</internal>
+        </member>
+        <member name="P:XAct.IO.HybridDirectoryWatcher.WatcherChangeTypes">
+            <summary>
+            Gets or sets the watcher events to watch for.
+            </summary>
+            <value>
+            The watcher change types.
+            </value>
+        </member>
+        <member name="P:XAct.IO.HybridDirectoryWatcher.ChangeFilters">
+            <summary>
+            Gets the events that raise the <see cref="E:XAct.IO.HybridDirectoryWatcher.Changed"/> event.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.HybridDirectoryWatcher.IncludeSubDirectories">
+            <summary>
+            Gets a value indicating whether [include sub directories].
+            </summary>
+            <value>
+            	<c>true</c> if [include sub directories]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.HybridDirectoryWatcher.FireDirectoryChangeEventsAsWell">
+            <summary>
+            Gets or sets a value indicating whether to
+            fire for Directory change events as well.
+            Most times you will be looking for File events only.
+            <para>
+            If you do turn this on, you will have to check whether
+            events come from Files or Dirs as follows:
+            <code>
+            <![CDATA[
+               FileAttributes attr = File.GetAttributes(e.FullPath);
+               if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {...} 
+            ]]>
+            </code>
+            </para>
+            </summary>
+            <value>
+            	<c>true</c> if [fire directory change events as well]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.HybridDirectoryWatcher.Path">
+            <summary>
+            Gets the path to the folder or file.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.HybridDirectoryWatcher.Filter">
+            <summary>
+            Gets the text filter of files to watch.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.HybridDirectoryWatcher.Excluded">
+            <summary>
+            Gets a list of excluded files.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.HybridDirectoryWatcher.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this 
+            <see cref="T:XAct.IO.FileSystemDirectoryWatcher"/> is enabled.
+            </summary>
+            <value>
+              <c>true</c> if enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.XAct#IHasInnerItemReadOnly#GetInnerItem``1">
+            <summary>
+            Gets the wrapped <c>FileSystemWatcher</c>.
+            </summary>
+            <value>The inner object.</value>
+        </member>
+        <member name="P:XAct.IO.HybridDirectoryWatcher.FileSystemWatcher">
+            <summary>
+            Gets the wrapped <see cref="P:XAct.IO.HybridDirectoryWatcher.FileSystemWatcher"/>.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.#ctor(XAct.Diagnostics.ITracingService,XAct.IO.IIOService,XAct.IO.IDirectoryWatcherConfiguration)">
+            <summary>
+            Initializes a new instance of the
+            <see cref="T:XAct.IO.FileSystemDirectoryWatcher"/> class
+            in order to watch for changes in a drop folder
+            (or other similar scenario).
+            </summary>
+            <param name="tracingService">The tracing service.</param>
+            <param name="ioService">The io service.</param>
+            <param name="fileSystemWatcherInstanceConfiguration">The file system watcher instance configuration.</param>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.FileSystemWatcherEvent(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles Created, Changed, Renamed (but not Deleted)
+             Events of the FileSystemWatcher control.
+            <para>
+            </para>
+            </summary>
+            <internal>
+            IMPORTANT: This is the main processor of events raised
+            by the FileSystemWatcher.
+            </internal>
+            <param name="source">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.TransferConfigArgsToLocalArgs(XAct.IO.IDirectoryWatcherConfiguration)">
+            <summary>
+            Transfers the config args received in constructor to local args.
+            </summary>
+            <param name="fileSystemWatcherInstanceConfiguration">The file system watcher instance configuration.</param>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.TimerElapsed(System.Object,System.Timers.ElapsedEventArgs)">
+            <summary>
+            Event to handle timer used to check whether we can still see target dir.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.CreateFileSystemWatcher">
+            <summary>
+            Creates the file system watcher.
+            <para>
+            Invoked by Constructor, and then 
+            only invoked if Directory became inaccessible, 
+            and had to delete previous FSW.
+            (this is because once a folder becomes inaccessible, FSW
+            doesn't recover).
+            </para>
+            </summary>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.AttachEventHandlers">
+            <summary>
+            Attaches the event handlers.
+            <para>
+            Invoked by <see cref="M:XAct.IO.HybridDirectoryWatcher.CreateFileSystemWatcher"/> only.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.DettachEventHandlers">
+            <summary>
+            <para>
+            Invoked by <see cref="M:XAct.IO.HybridDirectoryWatcher.TimerElapsed(System.Object,System.Timers.ElapsedEventArgs)"/> if target
+            path is no longer available, and have to destroy
+            FileSystemWatcher.
+            </para>
+            Detaches event handlers prior to Disposing FSW's whose 
+            directory have become inaccessible.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.IsAnExcludableDirectory(System.String)">
+            <summary>
+            Determines whether event is for a filename that is excluded, and can be 
+            ignored.
+            <para>
+            Invoked by <see cref="M:XAct.IO.HybridDirectoryWatcher.FileSystemWatcherEvent(System.Object,System.IO.FileSystemEventArgs)"/>.
+            </para>
+            </summary>
+            <param name="fileFullPath">The file full path.</param>
+            <returns>
+            	<c>true</c> if [is an excludable directory] [the specified file full path]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.FileSystemWatcherError(System.Object,System.IO.ErrorEventArgs)">
+            <summary>
+            Handles Buffer errors raised by the internal
+            <see cref="P:XAct.IO.HybridDirectoryWatcher.FileSystemWatcher"/>.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.IO.ErrorEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.FileSystemWatcherGeneralEvent(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Created event of the <see cref="P:XAct.IO.HybridDirectoryWatcher.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.FileSystemWatcherCreated(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Created event of the <see cref="P:XAct.IO.HybridDirectoryWatcher.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.FileSystemWatcherUpdated(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Changed event of the <see cref="P:XAct.IO.HybridDirectoryWatcher.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.FileSystemWatcherDeleted(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Deleted event of the <see cref="P:XAct.IO.HybridDirectoryWatcher.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.FileSystemWatcherRenamed(System.Object,System.IO.RenamedEventArgs)">
+            <summary>
+            Handles the Renamed event of the <see cref="P:XAct.IO.HybridDirectoryWatcher.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.RenamedEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.HybridDirectoryWatcher.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="T:XAct.IO.IDirectoryWatcherServiceState">
+            <summary>
+            Contract for a cache of <see cref="T:XAct.IO.IDirectoryWatcher"/>
+            insantiated by <see cref="T:XAct.IO.IDirectoryWatcherService"/>
+            </summary>
+        </member>
+        <member name="T:XAct.IO.IDirectoryWatcher">
+            <summary>
+            Contract for a instance to watch a directory.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.IDirectoryWatcher.Error">
+            <summary>
+            Occurs when a File is Created.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.IDirectoryWatcher.Event">
+            <summary>
+            Occurs when a File is Created,Changed,Renamed, or Deleted.
+            <para>
+            Always raised after <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/>,
+            <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Changed"/>,
+            <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Renamed"/>,
+            <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Deleted"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.IDirectoryWatcher.Created">
+            <summary>
+            Occurs when a File is Created.
+            <para>
+            In the case of a Move in the same directory (ie, a Rename)
+            it fires after the <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Deleted"/>.
+            </para>
+            <para>
+            In the case of a Copy, just <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/> is fired.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.IDirectoryWatcher.Changed">
+            <summary>
+            Occurs when a File is Changed.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.IDirectoryWatcher.Renamed">
+            <summary>
+            Occurs when a File is Renamed.
+            <para>
+            Occurs after both <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Deleted"/> and <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/> are Fired.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.IDirectoryWatcher.Deleted">
+            <summary>
+            Occurs when a File is Deleted.
+            <para>
+            In the case of a Move in the same dir (ie a Rename)
+            it fires before the <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/>
+            </para>
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcher.WatcherChangeTypes">
+            <summary>
+            Gets or sets the watcher events to watch for.
+            </summary>
+            <value>
+            The watcher change types.
+            </value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcher.ChangeFilters">
+            <summary>
+            Gets the events that raise the <see cref="E:XAct.IO.IDirectoryWatcher.Changed"/> event.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcher.IncludeSubDirectories">
+            <summary>
+            Gets a value indicating whether [include sub directories].
+            </summary>
+            <value>
+            	<c>true</c> if [include sub directories]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcher.FireDirectoryChangeEventsAsWell">
+            <summary>
+            Gets or sets a value indicating whether to
+            fire for Directory change events as well.
+            Most times you will be looking for File events only.
+            <para>
+            If you do turn this on, you will have to check whether
+            events come from Files or Dirs as follows:
+            <code>
+            <![CDATA[
+               FileAttributes attr = File.GetAttributes(e.FullPath);
+               if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {...} 
+            ]]>
+            </code>
+            </para>
+            </summary>
+            <value>
+            	<c>true</c> if [fire directory change events as well]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcher.Path">
+            <summary>
+            Gets the path to the folder or file.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcher.Filter">
+            <summary>
+            Gets the text filter of files to watch.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcher.Excluded">
+            <summary>
+            Gets a list of excluded files.
+            </summary>
+        </member>
+        <member name="T:XAct.IO.IHybridDirectoryWatcher">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:XAct.IO.FileSystemWatcherMethod">
+            <summary>
+            Type of polling mechanism to use.
+            </summary>
+        </member>
+        <member name="F:XAct.IO.FileSystemWatcherMethod.Undefined">
+            <summary>
+            No method selected.
+            <para>
+            This is an error state.
+            </para>
+            <para>
+            Value = 0.
+            </para>
+            </summary>
+        </member>
+        <member name="F:XAct.IO.FileSystemWatcherMethod.FileSystemWatcher">
+            <summary>
+            Use the Windows specific event based 
+            FileSystemWatcher mechanism.
+            <para>
+            Note that although more efficient and less traffic heavy
+            this limits both listener and server to being Windows servers.
+            </para>
+            <para>
+            Value = 1.
+            </para>
+            </summary>
+        </member>
+        <member name="F:XAct.IO.FileSystemWatcherMethod.Polling">
+            <summary>
+            Use a periodic polling mechanism to spot changes.
+            <para>
+            Less performant, but more polyvalent than using
+            <c>FileSystemWatcher.</c>
+            </para>
+            <para>
+            Value = 1.
+            </para>
+            </summary>
+        </member>
+        <member name="F:XAct.IO.FileSystemWatcherMethod.Hybrid">
+            <summary>
+            Hybrid using Watcher, and Polling to compensate for potential errors.
+            </summary>
+        </member>
+        <member name="T:XAct.IO.IDirectoryWatcherConfiguration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcherConfiguration.Method">
+            <summary>
+            Gets or sets the method to use to spot changes.
+            <para>
+            Default is: <see cref="F:XAct.IO.FileSystemWatcherMethod.FileSystemWatcher"/> 
+            </para>
+            </summary>
+            <value>The method.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcherConfiguration.PollingInterval">
+            <summary>
+            Gets or sets the polling interval (applied only if <see cref="P:XAct.IO.IDirectoryWatcherConfiguration.Method"/> is set to Polling).
+            </summary>
+            <value>The polling interval.</value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcherConfiguration.Path">
+            <summary>
+            The folder/directory path to be watched.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcherConfiguration.Filter">
+            <summary>
+            The filename filter to be watched for (eg: '*.doc').
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcherConfiguration.Excluded">
+            <summary>
+            An optional list files to be excluded 
+            beyond what was <see cref="P:XAct.IO.IDirectoryWatcherConfiguration.Filter"/>ed out
+            (eg: '*.tmp.doc')
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcherConfiguration.IncludeSubDirectories">
+            <summary>
+            Gets or sets a value indicating whether 
+            to include changes within sub directories.
+            <para>
+            Default is true.
+            </para>
+            </summary>
+            <value>
+            	<c>true</c> if [include sub directories]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcherConfiguration.FireDirectoryChangeEventsAsWell">
+            <summary>
+            Gets or sets a value indicating whether to
+            fire for Directory change events as well.
+            Most times you will be looking for File events only.
+            <para>
+            Default is false.
+            </para>
+            </summary>
+            <value>
+            	<c>true</c> if [fire directory change events as well]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcherConfiguration.ChangeFilters">
+            <summary>
+            Gets or sets the change events to watch for.
+            (FileName, DirectoryName, Attributes,Size, LastWrite,LastAccess, CreationTime, Security)
+            <para>
+            Default is <c>NotifyFilters.LastWrite | NotifyFilters.FileName</c>
+            </para>
+            <para>
+            Note: Ignored when <see cref="P:XAct.IO.IDirectoryWatcherConfiguration.Method"/> is Polling.
+            </para>
+            </summary>
+            <value>
+            The change filters.
+            </value>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcherConfiguration.WatcherChangeTypes">
+            <summary>
+            Gets or sets the watcher events to watch for.
+            (Created, Deleted, Changed, Renamed,All)
+            <para>
+            Default is <see cref="F:System.IO.WatcherChangeTypes.Created"/>
+            (in order to produce less chatter, and not overflow the 64K buffer. A known issue with FileSystemWatcher).
+            </para>
+            </summary>
+            <value>
+            The watcher change types.
+            </value>
+        </member>
+        <member name="T:XAct.IO.IDirectoryWatcherService">
+            <summary>
+            Contract for setting up
+            <see cref="T:XAct.IO.FileSystemDirectoryWatcher"/>
+            to watch for file changes in a directory.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDirectoryWatcherService.State">
+            <summary>
+            Gets the collection of watchers.
+            </summary>
+            <value>
+            The state.
+            </value>
+        </member>
+        <member name="M:XAct.IO.IDirectoryWatcherService.Clear">
+            <summary>
+            Disables and clears all watchers.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.IDirectoryWatcherService.Register(XAct.IO.IDirectoryWatcherConfiguration)">
+            <summary>
+            Sets up a <see cref="T:XAct.IO.FileSystemDirectoryWatcher"/> 
+            to monitor a directory or file according to the specs
+            given in <paramref name="watcherInstanceConfiguration"/>
+            </summary>
+            <param name="watcherInstanceConfiguration">The watcher instance configuration.</param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.IDirectoryWatcherService.Remove(XAct.IO.IDirectoryWatcher)">
+            <summary>
+            Removes the specified <see cref="T:XAct.IO.IDirectoryWatcher"/> from the <see cref="T:XAct.IO.IDirectoryWatcherServiceState"/>
+            after Disabling it.
+            </summary>
+            <param name="fileSystemDirectoryWatcherInstance">The file system directory watcher instance.</param>
+        </member>
+        <member name="T:XAct.IO.FileSystemDirectoryWatcher">
+            <summary>
+            An <see cref="T:XAct.IO.FileSystemDirectoryWatcher"/>
+            created by <see cref="T:XAct.IO.IDirectoryWatcherService"/>,
+            based on the information
+            provided in an instance of
+            <see cref="T:XAct.IO.Implementations.DirectoryWatcherConfiguration"/>
+            </summary>
+            <remarks>
+            	<para>
+            Created = Created
+            </para>
+            	<para>
+            Copied = Created
+            </para>
+            	<para>
+            Moved from a different dir =  Created
+            </para>
+            	<para>
+            Moved in same dir (ie Renamed) =  Deleted, Then Created, then Renamed
+            </para>
+            	<para>
+            Warning: Watch out with touching Files too Quickly. Elapse some time to let FileSystem
+            settle back down (could be firing events while streams are still open).
+            See: http://www.techrepublic.com/article/use-the-net-filesystemwatcher-object-to-monitor-directory-changes-in-c/6165137
+            </para>
+            	<para>
+            Reference: http://msdn.microsoft.com/en-us/library/system.io.filesystemwatcher(v=vs.71).aspx
+            </para>
+            </remarks>
+        </member>
+        <member name="F:XAct.IO.FileSystemDirectoryWatcher._targetStillAccessibleTimer">
+            <summary>
+            Timer used to poll whether target directory is still 
+            accessible. If not, destroys current watcher, and builds
+            another when directory rebecomes available (this is a solution
+            to work around a known bug of <see cref="P:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcher"/>
+            where if the target dir becomes unaccessible (network failure)
+            FileSystemWatcher doesn't restart when the folder becomes available.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.FileSystemDirectoryWatcher.Error">
+            <summary>
+            Occurs when a File is Created.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.FileSystemDirectoryWatcher.Event">
+            <summary>
+            Occurs when a File is Created,Changed,Renamed, or Deleted.
+            <para>
+            Always raised after <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/>,
+            <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Changed"/>,
+            <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Renamed"/>,
+            <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Deleted"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.FileSystemDirectoryWatcher.Created">
+            <summary>
+            Occurs when a File is Created.
+            <para>
+            In the case of a Move in the same directory (ie, a Rename)
+            it fires after the <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Deleted"/>.
+            </para>
+            <para>
+            In the case of a Copy, just <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/> is fired.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.FileSystemDirectoryWatcher.Changed">
+            <summary>
+            Occurs when a File is Changed.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.FileSystemDirectoryWatcher.Renamed">
+            <summary>
+            Occurs when a File is Renamed.
+            <para>
+            Occurs after both <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Deleted"/> and <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/> are Fired.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.FileSystemDirectoryWatcher.Deleted">
+            <summary>
+            Occurs when a File is Deleted.
+            <para>
+            In the case of a Move in the same dir (ie a Rename)
+            it fires before the <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/>
+            </para>
+            </summary>
+        </member>
+        <member name="P:XAct.IO.FileSystemDirectoryWatcher.Name">
+            <summary>
+            Gets the name of the object.
+            <para>Member defined in<see cref="T:XAct.IHasName"/></para>
+            </summary>
+            <value>The name.</value>
+            <internal><para>8/13/2011: Sky</para></internal>
+        </member>
+        <member name="P:XAct.IO.FileSystemDirectoryWatcher.Tag">
+            <summary>
+            Gets the tag of the object.
+            <para>Member defined in<see cref="T:XAct.IHasTag"/></para>
+            </summary>
+            <value>The name.</value>
+            <internal>8/13/2011: Sky</internal>
+        </member>
+        <member name="P:XAct.IO.FileSystemDirectoryWatcher.WatcherChangeTypes">
+            <summary>
+            Gets or sets the watcher events to watch for.
+            </summary>
+            <value>
+            The watcher change types.
+            </value>
+        </member>
+        <member name="P:XAct.IO.FileSystemDirectoryWatcher.ChangeFilters">
+            <summary>
+            Gets the events that raise the <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Changed"/> event.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.FileSystemDirectoryWatcher.IncludeSubDirectories">
+            <summary>
+            Gets a value indicating whether [include sub directories].
+            </summary>
+            <value>
+            	<c>true</c> if [include sub directories]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.FileSystemDirectoryWatcher.FireDirectoryChangeEventsAsWell">
+            <summary>
+            Gets or sets a value indicating whether to
+            fire for Directory change events as well.
+            Most times you will be looking for File events only.
+            <para>
+            If you do turn this on, you will have to check whether
+            events come from Files or Dirs as follows:
+            <code>
+            <![CDATA[
+               FileAttributes attr = File.GetAttributes(e.FullPath);
+               if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {...} 
+            ]]>
+            </code>
+            </para>
+            </summary>
+            <value>
+            	<c>true</c> if [fire directory change events as well]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.FileSystemDirectoryWatcher.Path">
+            <summary>
+            Gets the path to the folder or file.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.FileSystemDirectoryWatcher.Filter">
+            <summary>
+            Gets the text filter of files to watch.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.FileSystemDirectoryWatcher.Excluded">
+            <summary>
+            Gets a list of excluded files.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.FileSystemDirectoryWatcher.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this 
+            <see cref="T:XAct.IO.FileSystemDirectoryWatcher"/> is enabled.
+            </summary>
+            <value>
+              <c>true</c> if enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.GetInnerItem``1">
+            <summary>
+            Gets the wrapped <c>FileSystemWatcher</c>.
+            </summary>
+            <value>The inner object.</value>
+        </member>
+        <member name="P:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcher">
+            <summary>
+            Gets the wrapped <see cref="P:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcher"/>.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.#ctor(XAct.Diagnostics.ITracingService,XAct.IO.IIOService,XAct.IO.IDirectoryWatcherConfiguration)">
+            <summary>
+            Initializes a new instance of the
+            <see cref="T:XAct.IO.FileSystemDirectoryWatcher" /> class
+            in order to watch for changes in a drop folder
+            (or other similar scenario).
+            </summary>
+            <param name="tracingService">The tracing service.</param>
+            <param name="ioService">The io service.</param>
+            <param name="fileSystemWatcherInstanceConfiguration">The file system watcher instance configuration.</param>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcherEvent(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles Created, Changed, Renamed (but not Deleted)
+             Events of the FileSystemWatcher control.
+            <para>
+            </para>
+            </summary>
+            <internal>
+            IMPORTANT: This is the main processor of events raised
+            by the FileSystemWatcher.
+            </internal>
+            <param name="source">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.TransferConfigArgsToLocalArgs(XAct.IO.IDirectoryWatcherConfiguration)">
+            <summary>
+            Transfers the config args received in constructor to local args.
+            </summary>
+            <param name="fileSystemWatcherInstanceConfiguration">The file system watcher instance configuration.</param>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.TargetStillAccessibleTimerElapsed(System.Object,System.Timers.ElapsedEventArgs)">
+            <summary>
+            Event to handle timer used to check whether we can still see target dir.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.CreateFileSystemWatcher">
+            <summary>
+            Creates the file system watcher.
+            <para>
+            Invoked by Constructor, and then 
+            only invoked if Directory became inaccessible, 
+            and had to delete previous FSW.
+            (this is because once a folder becomes inaccessible, FSW
+            doesn't recover).
+            </para>
+            </summary>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.AttachEventHandlers">
+            <summary>
+            Attaches the event handlers.
+            <para>
+            Invoked by <see cref="M:XAct.IO.FileSystemDirectoryWatcher.CreateFileSystemWatcher"/> only.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.DettachEventHandlers">
+            <summary>
+            <para>
+            Invoked by <see cref="M:XAct.IO.FileSystemDirectoryWatcher.TargetStillAccessibleTimerElapsed(System.Object,System.Timers.ElapsedEventArgs)"/> if target
+            path is no longer available, and have to destroy
+            FileSystemWatcher.
+            </para>
+            Detaches event handlers prior to Disposing FSW's whose 
+            directory have become inaccessible.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.IsAnExcludableDirectory(System.String)">
+            <summary>
+            Determines whether event is for a filename that is excluded, and can be 
+            ignored.
+            <para>
+            Invoked by <see cref="M:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcherEvent(System.Object,System.IO.FileSystemEventArgs)"/>.
+            </para>
+            </summary>
+            <param name="fileFullPath">The file full path.</param>
+            <returns>
+            	<c>true</c> if [is an excludable directory] [the specified file full path]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcherError(System.Object,System.IO.ErrorEventArgs)">
+            <summary>
+            Handles Buffer errors raised by the internal
+            <see cref="P:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcher"/>.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.IO.ErrorEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcherGeneralEvent(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Created event of the <see cref="P:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcherCreated(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Created event of the <see cref="P:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcherUpdated(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Changed event of the <see cref="P:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcherDeleted(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Deleted event of the <see cref="P:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcherRenamed(System.Object,System.IO.RenamedEventArgs)">
+            <summary>
+            Handles the Renamed event of the <see cref="P:XAct.IO.FileSystemDirectoryWatcher.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.RenamedEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.FileSystemDirectoryWatcher.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources.
+            <para>
+            The bulk of the clean-up code is implemented in Dispose(bool)
+            </para>
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="T:XAct.IO.IPollingDirectoryWatcher">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IPollingDirectoryWatcher.Interval">
+            <summary>
+            Gets or sets the polling interval.
+            </summary>
+            <value>The interval.</value>
+        </member>
+        <member name="M:XAct.IO.IPollingDirectoryWatcher.ResetTimer">
+            <summary>
+            Resets the timer. Only useful for test purposes.
+            </summary>
+        </member>
+        <member name="T:XAct.IO.PollingDirectoryWatcher">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:XAct.IO.PollingDirectoryWatcher.Name">
+            <summary>
+            Gets the name of the object.
+            <para>Member defined in<see cref="T:XAct.IHasName"/></para>
+            </summary>
+            <value>The name.</value>
+            <internal>8/13/2011: Sky</internal>
+        </member>
+        <member name="P:XAct.IO.PollingDirectoryWatcher.Tag">
+            <summary>
+            Gets the tag of the object.
+            <para>Member defined in<see cref="T:XAct.IHasTag"/></para>
+            </summary>
+            <value>The name.</value>
+            <internal>8/13/2011: Sky</internal>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.ResetTimer">
+            <summary>
+            Resets the timer. Only useful for test purposes.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.PollingDirectoryWatcher.Interval">
+            <summary>
+            Gets or sets the polling interval.
+            </summary>
+            <value>The interval.</value>
+        </member>
+        <member name="P:XAct.IO.PollingDirectoryWatcher.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this 
+            <see cref="T:XAct.IO.FileSystemDirectoryWatcher"/> is enabled.
+            </summary>
+            <value>
+              <c>true</c> if enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="E:XAct.IO.PollingDirectoryWatcher.Error">
+            <summary>
+            Occurs when a File is Created.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.PollingDirectoryWatcher.Event">
+            <summary>
+            Occurs when a File is Created,Changed,Renamed, or Deleted.
+            <para>
+            Always raised after <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/>,
+            <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Changed"/>,
+            <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Renamed"/>,
+            <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Deleted"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.PollingDirectoryWatcher.Created">
+            <summary>
+            Occurs when a File is Created.
+            <para>
+            In the case of a Move in the same directory (ie, a Rename)
+            it fires after the <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Deleted"/>.
+            </para>
+            	<para>
+            In the case of a Copy, just <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/> is fired.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.PollingDirectoryWatcher.Changed">
+            <summary>
+            Occurs when a File is Changed.
+            </summary>
+        </member>
+        <member name="E:XAct.IO.PollingDirectoryWatcher.Renamed">
+            <summary>
+            Occurs when a File is Renamed.
+            <para>
+            Occurs after both <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Deleted"/> and <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/> are Fired.
+            </para>
+            </summary>
+        </member>
+        <member name="E:XAct.IO.PollingDirectoryWatcher.Deleted">
+            <summary>
+            Occurs when a File is Deleted.
+            <para>
+            In the case of a Move in the same dir (ie a Rename)
+            it fires before the <see cref="E:XAct.IO.FileSystemDirectoryWatcher.Created"/>
+            	</para>
+            </summary>
+        </member>
+        <member name="P:XAct.IO.PollingDirectoryWatcher.WatcherChangeTypes">
+            <summary>
+            Gets or sets the watcher events to watch for.
+            </summary>
+            <value>
+            The watcher change types.
+            </value>
+        </member>
+        <member name="P:XAct.IO.PollingDirectoryWatcher.ChangeFilters">
+            <summary>
+            Gets the events that raise the <see cref="E:XAct.IO.IDirectoryWatcher.Changed"/> event.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.PollingDirectoryWatcher.IncludeSubDirectories">
+            <summary>
+            Gets a value indicating whether [include sub directories].
+            </summary>
+            <value>
+            	<c>true</c> if [include sub directories]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.PollingDirectoryWatcher.FireDirectoryChangeEventsAsWell">
+            <summary>
+            Gets or sets a value indicating whether to
+            fire for Directory change events as well.
+            Most times you will be looking for File events only.
+            <para>
+            If you do turn this on, you will have to check whether
+            events come from Files or Dirs as follows:
+            <code>
+            <![CDATA[
+               FileAttributes attr = File.GetAttributes(e.FullPath);
+               if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {...} 
+            ]]>
+            </code>
+            </para>
+            </summary>
+            <value>
+            	<c>true</c> if [fire directory change events as well]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.PollingDirectoryWatcher.Path">
+            <summary>
+            Gets the path to the folder or file.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.PollingDirectoryWatcher.Filter">
+            <summary>
+            Gets the text filter of files to watch.
+            </summary>
+        </member>
+        <member name="P:XAct.IO.PollingDirectoryWatcher.Excluded">
+            <summary>
+            Gets a list of excluded files.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.#ctor(XAct.Diagnostics.ITracingService,XAct.IO.IIOService,XAct.IO.IDirectoryWatcherConfiguration)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.PollingDirectoryWatcher"/> class.
+            </summary>
+            <param name="tracingService">The tracing service.</param>
+            <param name="ioService">The io service.</param>
+            <param name="fileSystemWatcherInstanceConfiguration">The file system watcher instance configuration.</param>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.FileSystemWatcherError(System.Object,System.IO.ErrorEventArgs)">
+            <summary>
+            Handles Buffer errors raised by the internal
+            <see cref="T:System.IO.FileSystemWatcher"/>.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.IO.ErrorEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.FileSystemWatcherGeneralEvent(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Created event of the <see cref="T:System.IO.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.FileSystemWatcherCreated(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Created event of the <see cref="T:System.IO.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.FileSystemWatcherUpdated(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Changed event of the <see cref="T:System.IO.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.FileSystemWatcherDeleted(System.Object,System.IO.FileSystemEventArgs)">
+            <summary>
+            Handles the Deleted event of the <see cref="T:System.IO.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.FileSystemWatcherRenamed(System.Object,System.IO.RenamedEventArgs)">
+            <summary>
+            Handles the Renamed event of the <see cref="T:System.IO.FileSystemWatcher"/>  control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.IO.FileSystemEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.TransferConfigArgsToLocalArgs(XAct.IO.IDirectoryWatcherConfiguration)">
+            <summary>
+            Transfers the config args received in constructor to local args.
+            </summary>
+            <param name="fileSystemWatcherInstanceConfiguration">The file system watcher instance configuration.</param>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.TimerElapsed(System.Object,System.Timers.ElapsedEventArgs)">
+            <summary>
+            Event to handle timer used to check whether we can still see target dir.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.PollingDirectoryWatcher.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="T:XAct.IO.IDropFolderDirectorySpecification">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDropFolderDirectorySpecification.IncludeSubDirectories">
+            <summary>
+            Gets or sets a value indicating whether to include events from sub directories.
+            <para>
+            CAUTION:
+            Default value is <c>False</c> so that if Archive and Error folders are 
+            nested (per Directory specification), there isn't a recursive loop.
+            </para>
+            </summary>
+            <value>
+            	<c>true</c> if [include sub directories]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderDirectorySpecification.Directory">
+            <summary>
+            Gets or sets the path of the folder to watch.
+            <para>
+            The path can be local or remote.
+            <code>
+            "\\serverXYZ\sharedFolder\"
+            </code>
+            </para>
+            </summary>
+            <value>The path to the folder to watch.</value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderDirectorySpecification.SuccessStrategy">
+            <summary>
+            Gets or sets settings as to where to archive dropped files,
+            as well when to remove them.
+            </summary>
+            <remarks>
+            <remarks>
+            <para>
+            If using a config file to specify settings, the values
+            will come from parsing something similar to the following:
+            <![CDATA[
+            <dropFolderSettings>
+              <dropFolders>
+                <dropFolder Directory="...">
+                  <successStrategy Enabled="Enabled" delay="0,0,1" directory="..."/>
+                  <errorStrategy Enabled="Enabled" directory="..."/>
+                </dropFolder>
+                <dropFolder Directory="..."/>
+              </dropFolders>
+              <successStrategy enabled="true" delay="0,0,1" directory="..."/>
+              <errorStrategy enabled="true" directory="..."/>
+            </dropFolderSettings>
+            ]]>
+            </para>
+            </remarks>
+            </remarks>
+            <value>The archive specs.</value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderDirectorySpecification.ErrorStrategy">
+            <summary>
+            Gets or sets the (optional) error folder to move documents (when possible)
+            to when there was an error.
+            <para>
+            The path can be local or remote.
+            <code>
+            "\\serverXYZ\sharedFolder\error\"
+            </code>
+            </para>
+            </summary>
+            <value>The error folder.</value>
+        </member>
+        <member name="T:XAct.IO.IDropFolderResultStrategySpecification">
+            <summary>
+            A common absract base class for Success/Error strategies.
+            </summary>
+            <remarks>
+            <para>
+            If using a config file to specify settings, the values
+            will come from parsing something similar to the following:
+            <![CDATA[
+            <dropFolderSettings>
+              <dropFolders>
+                <dropFolder Directory="...">
+                  <successStrategy directory="...\Sales\Success" archiveAction="Delete" archiveDelay="14,0,0,0"  />
+                  <errorStrategy  directory="...\Sales\Error" archiveAction="Move" archiveDelay="14,0,0,0"  archiveDirectory="...\Common\Error" />
+                </dropFolder>
+                <dropFolder Directory="..."/>
+              </dropFolders>
+                  <successStrategy directory="...\Common\Success" archiveAction="Delete" archiveDelay="14,0,0,0" />
+                  <errorStrategy  directory="...\Common\Error" archiveAction="Delete" archiveDelay="14,0,0,0"   />
+            </dropFolderSettings>
+            ]]>
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XAct.IO.IDropFolderResultStrategySpecification.Directory">
+            <summary>
+            Gets or sets the directory to move the files to.
+            <para>Default is null.</para>
+            </summary>
+            <value>The directory.</value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderResultStrategySpecification.ArchiveCheckInterval">
+            <summary>
+            Gets or sets the delay before files the <see cref="P:XAct.IO.IDropFolderResultStrategySpecification.ArchiveAction"/> (Move or Delete)
+            is taken.
+            <para>
+            Default is <c>15</c> minutes.
+            </para>
+            </summary>
+            <value>The delay.</value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderResultStrategySpecification.ArchiveDelay">
+            <summary>
+            Gets or sets the delay before files the <see cref="P:XAct.IO.IDropFolderResultStrategySpecification.ArchiveAction"/> (Move or Delete)
+            is taken.
+            <para>
+            Default is 14 days.
+            </para>
+            </summary>
+            <value>The delay.</value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderResultStrategySpecification.ArchiveAction">
+            <summary>
+            Gets or sets the archiving strategy to use on the associated drop folder.
+            <para>
+            Default value is <c>NoAction</c>.
+            </para>
+            </summary>
+            <value>The action.</value>
+        </member>
+        <member name="P:XAct.IO.IDropFolderResultStrategySpecification.ArchiveMoveTo">
+            <summary>
+            If <see cref="P:XAct.IO.IDropFolderResultStrategySpecification.ArchiveAction"/> is set to <c>Move</c>,
+            moves the file to this directory
+            after the <see cref="P:XAct.IO.IDropFolderResultStrategySpecification.ArchiveDelay"/>
+            <para>
+            Default value = null
+            </para>
+            </summary>
+        </member>
+        <member name="P:XAct.IO.IDropFolderResultStrategySpecification.ArchiveFileDateType">
+            <summary>
+            Gets the type of the file date tp use when comparing (Created, Modified, Accessed).
+            <para>
+            Default is <c>LastModified</c>.
+            </para>
+            </summary>
+            <value>
+            The type of the file date.
+            </value>
+        </member>
+        <member name="T:XAct.XTensions">
+            <summary>
+            Extension Methods
+            </summary>
+        </member>
+        <member name="M:XAct.XTensions.Map(XAct.IO.IDropFolderResultStrategySpecification,XAct.IO.IDirectoryArchiverConfiguration)">
+            <summary>
+            Maps the config settings to the target object.
+            </summary>
+            <param name="dropFolderSpecifications">The drop folder specifications.</param>
+            <param name="directoryArchiverConfiguration">The directory archiver configuration.</param>
+        </member>
+    </members>
+</doc>

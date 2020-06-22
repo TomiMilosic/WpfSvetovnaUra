@@ -1,0 +1,51 @@
+﻿<Window x:Class="WpfSvetovnaUra.OsebeVmestu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSvetovnaUra"
+        mc:Ignorable="d"
+        Title="OsebeVmestu" Height="450" Width="800">
+    <Grid Background="AntiqueWhite">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="8*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+
+        <Label Content="Osebe v kraju: " Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Label  Style="{StaticResource NapisKraj}" Grid.Row="0" Grid.Column="1" Name="krajlabel" Content="Kraj"/>
+        <Button Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="80" Height="25" Content="Dodaj osebo" Click="Button_Click_1" ></Button>
+
+        <DataGrid Grid.Row="1" Grid.Column="1" Name="OsebeSeznam"  AutoGenerateColumns="False" Margin="10" IsReadOnly="True" MouseRightButtonDown="OsebeSeznam_MouseRightButtonDown">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="3*" Header="Ime" Binding="{Binding Path=ime}"></DataGridTextColumn>
+                <DataGridTextColumn Width="3*" Header="Priimek" Binding="{Binding Path=priimek}" ></DataGridTextColumn>
+                <DataGridTextColumn Width="3*" Header="Telefon" Binding="{Binding Path=telefon, StringFormat={}{0:(###)###-####}}"/>
+                <DataGridTextColumn Width="3*"  Header="Opombe" Binding="{Binding Path=opombe}"/>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="Button_Click">Uredi</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn  Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Height="15" Width="15" Source="{Binding slika}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBox Name="Iskanje"  FontStyle="Italic" Foreground="Gray" Text="Išči" HorizontalAlignment="Right"  Margin="0,0,10,20" VerticalAlignment="Bottom" KeyUp="Iskanje_KeyUp" Grid.Row="0" Grid.Column="1" Width="100" Height="20" GotFocus="Iskanje_GotFocus" />
+
+
+    </Grid>
+</Window>

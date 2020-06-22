@@ -1,0 +1,636 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>XAct.IO</name>
+    </assembly>
+    <members>
+        <member name="T:XAct.Diagnostics.Status.Connectors.FileSizeStatusServiceConnectorFactory">
+            <summary>
+            Factory for a <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnector"/>
+            </summary>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.FileSizeStatusServiceConnectorFactory.Create(System.String,System.String,System.String,System.Boolean,XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnectorConfigurationItem[])">
+            <summary>
+            Creates a <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnector"/>.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="title">The title.</param>
+            <param name="description">The description.</param>
+            <param name="performDeleteCheck">if set to <c>true</c> [perform delete check].</param>
+            <param name="directoryInfos">The directories.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XAct.Diagnostics.Status.Connectors.DirectoryAccessibilityStatusServiceConnectorFactory">
+            <summary>
+            A Factory for creating <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnector"/> instances.
+            </summary>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.DirectoryAccessibilityStatusServiceConnectorFactory.Create(System.String,System.String,System.String,System.Boolean,XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfigurationItem[])">
+            <summary>
+            Creates a <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnector"/>.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="title">The title.</param>
+            <param name="description">The description.</param>
+            <param name="performDeleteCheck">if set to <c>true</c> [perform delete check].</param>
+            <param name="directoryInfos">The directories.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XAct.Diagnostics.Status.Connectors.DirectorySizeStatusServiceConnectorFactory">
+            <summary>
+            Factory for a <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnector"/>
+            </summary>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.DirectorySizeStatusServiceConnectorFactory.Create(System.String,System.String,System.String,System.Boolean,XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnectorConfigurationItem[])">
+            <summary>
+            Creates a <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnector"/>.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="title">The title.</param>
+            <param name="description">The description.</param>
+            <param name="performDeleteCheck">if set to <c>true</c> [perform delete check].</param>
+            <param name="directoryInfos">The directories.</param>
+            <returns></returns>
+        </member>
+        <member name="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfigurationItem">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfigurationItem.#ctor(System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfigurationItem"/> class.
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfigurationItem.Title">
+            <summary>
+            Gets or sets the title.
+            <para>
+            Member defined in the <see cref="T:XAct.IHasTitle"/> contract.
+            </para>
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfigurationItem.DirectoryPath">
+            <summary>
+            The name of the directory to check
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfigurationItem.TryForcingDirectoryCreationIfDirectoryDoesNotExist">
+            <summary>
+            If not found, force the creation of the directory?
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfigurationItem.PerformReadCheck">
+            <summary>
+            Perform a read check?
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfigurationItem.PerformWriteCheck">
+            <summary>
+            Perform a write check?
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfigurationItem.PerformDeleteCheck">
+            <summary>
+            Perform a delete check?
+            </summary>
+        </member>
+        <member name="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnector">
+            <summary>
+            An implementation 
+            Connector to retrieve information regarding 
+            accessibility of Directories
+            </summary>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnector.#ctor(XAct.Environment.IEnvironmentService,XAct.IO.IPathService,XAct.IO.IFSIOService,XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnectorConfiguration)">
+            <summary>
+            Files the read write access connector.
+            </summary>
+            <param name="environmentService">The environment service.</param>
+            <param name="pathService">The path service.</param>
+            <param name="fsioService">The fsio service.</param>
+            <param name="directoryAccessibilityStatusServiceConnectorConfiguration">The directory accessibility status feed service connector configuration.</param>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnector.Get(System.Object,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+            <summary>
+            Gets the <see cref="T:XAct.Diagnostics.Services.Implementations.StatusResponse"/>.
+            </summary>
+            <param name="arguments">The arguments.</param>
+            <param name="startTimeUtc">The start time UTC.</param>
+            <param name="endTimeUtc">The end time UTC.</param>
+            <returns></returns>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnector.Configuration">
+            <summary>
+            The configuration package of this Connector.
+            </summary>
+        </member>
+        <member name="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnectorConfiguration">
+            <summary>
+            A configuration object for 
+            an instance of 
+            <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnector"/>
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnectorConfiguration.Directories">
+            <summary>
+            List of directories to check.
+            </summary>
+        </member>
+        <member name="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnector">
+            <summary>
+            An implementation 
+            Connector to retrieve information regarding 
+            accessibility of Directories
+            </summary>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnector.#ctor(XAct.Environment.IEnvironmentService,XAct.IO.IPathService,XAct.IO.IFSIOService,XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfiguration)">
+            <summary>
+            Files the read write access connector.
+            </summary>
+            <param name="environmentService">The environment service.</param>
+            <param name="pathService">The path service.</param>
+            <param name="fsioService">The fsio service.</param>
+            <param name="directoryAccessibilityStatusServiceConnectorConfiguration">The directory accessibility status feed service connector configuration.</param>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnector.Get(System.Object,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+            <summary>
+            Gets the <see cref="T:XAct.Diagnostics.Services.Implementations.StatusResponse"/>.
+            </summary>
+            <param name="arguments">The arguments.</param>
+            <param name="startTimeUtc">The start time UTC.</param>
+            <param name="endTimeUtc">The end time UTC.</param>
+            <returns></returns>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnector.Configuration">
+            <summary>
+            The configuration package of this Connector.
+            </summary>
+        </member>
+        <member name="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfiguration">
+            <summary>
+            A configuration object for 
+            an instance of 
+            <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnector"/>
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfiguration.Directories">
+            <summary>
+            List of directories to check.
+            </summary>
+        </member>
+        <member name="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnectorConfigurationItem">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnectorConfigurationItem.#ctor(System.String,System.String,System.Int64,System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.DirectoryAccessibilityStatusServiceConnectorConfigurationItem"/> class.
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnectorConfigurationItem.Title">
+            <summary>
+            Gets or sets the title.
+            </summary>
+            <value>
+            The title.
+            </value>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnectorConfigurationItem.DirectoryPath">
+            <summary>
+            The name of the directory to check
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnectorConfigurationItem.WarningBytesSize">
+            <summary>
+            The File size (in Bytes) at which to change the status to Warning.
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.DirectorySizeStatusServiceConnectorConfigurationItem.ErrorBytesSize">
+            <summary>
+            The Max file size to allow -- the file size (in Bytes) at which to change the status to Fail/Error.
+            </summary>
+        </member>
+        <member name="T:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnector">
+            <summary>
+            Connector to retrieve information regarding accessibility of Directories
+            </summary>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnector.#ctor(XAct.Environment.IEnvironmentService,XAct.IO.IFSIOService,XAct.IO.IPathService,XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnectorConfiguration)">
+            <summary>
+            Files the read write access connector.
+            </summary>
+            <param name="environmentService">The environment service.</param>
+            <param name="fsioService">The fsio service.</param>
+            <param name="pathService">The path service.</param>
+            <param name="fileSizeStatusServiceConnectorConfiguration">The file size status feed service connector configuration object.</param>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnector.Get(System.Object,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+            <summary>
+            Gets the <see cref="T:XAct.Diagnostics.Services.Implementations.StatusResponse"/>
+            containing Data and/or Metrics.
+            </summary>
+            <param name="arguments">The arguments.</param>
+            <param name="startTimeUtc">The start time UTC.</param>
+            <param name="endTimeUtc">The end time UTC.</param>
+            <returns></returns>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnector.Configuration">
+            <summary>
+            The configuration package of this Connector.
+            </summary>
+        </member>
+        <member name="T:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnectorConfiguration">
+            <summary>
+            Configuration object for an instance of 
+            <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnector"/>
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnectorConfiguration.Files">
+            <summary>
+            Gets the files to test size of.
+            </summary>
+            <value>
+            The files.
+            </value>
+        </member>
+        <member name="T:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnectorConfigurationItem">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnectorConfigurationItem.#ctor(System.String,System.String,System.Int64,System.Int64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnectorConfigurationItem"/> class.
+            </summary>
+            <param name="title">The title.</param>
+            <param name="filePath">The path.</param>
+            <param name="warningBytesSize">Size of the warning byte.</param>
+            <param name="errorBytesSize">Size of the error byte.</param>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnectorConfigurationItem.Title">
+            <summary>
+            The displayed Title (use this to show the filename, wtihout path, or obfuscate the actual name of the file).
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnectorConfigurationItem.FilePath">
+            <summary>
+            The name of the file to check
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnectorConfigurationItem.WarningBytesSize">
+            <summary>
+            The File size (in Bytes) at which to change the status to Warning.
+            </summary>
+        </member>
+        <member name="P:XAct.Diagnostics.Status.Connectors.Implementations.FileSizeStatusServiceConnectorConfigurationItem.ErrorBytesSize">
+            <summary>
+            The Max file size to allow -- the file size (in Bytes) at which to change the status to Fail/Error.
+            </summary>
+        </member>
+        <member name="T:XAct.IO.Compression.ICompressionService">
+            <summary>
+            The contract for a service to create and expand Zip and other Compression files.
+            <para>
+            <see cref="T:XAct.IO.Compression.ICompressionService"/> is specialized further by
+            <c>IZipPackageCompressionService</c> and <c>IDotNetZipCompressionService</c>
+            in <c>XAct.Compression.ZipPackage</c> and <c>XAct.Compression.DotNetZip</c>
+            </para>
+            </summary>
+        </member>
+        <member name="M:XAct.IO.Compression.ICompressionService.AddDirectoryToZip(System.String,System.String)">
+            <summary>
+            Adds all descendent files within <paramref name="directoryFullName"/> to the Zip file.
+            </summary>
+            <param name="outputZipFileFullName">The zip file path.</param>
+            <param name="directoryFullName">The directory info.</param>
+        </member>
+        <member name="M:XAct.IO.Compression.ICompressionService.AddFileToZip(System.String,System.String,System.String)">
+            <summary>
+            Adds the specified file to the Zip file.
+            <para>
+            If <paramref name="relativeToDirectoryFullName"/> = null, defaults to <c>file.DirectoryInfo</c>
+            </para>
+            </summary>
+            <param name="outputZipFileFullName">The zip file path.</param>
+            <param name="fileFullName">The new file path.</param>
+            <param name="relativeToDirectoryFullName">The relative to directory.</param>
+        </member>
+        <member name="M:XAct.IO.Compression.ICompressionService.AddDirectoryToZip(System.IO.Stream,System.String)">
+            <summary>
+            Adds all descendent files within <paramref name="directoryFullName"/> to the Zip file.
+            </summary>
+            <param name="outputZipFileStream">The zip file stream.</param>
+            <param name="directoryFullName">The directory of files to add.</param>
+        </member>
+        <member name="M:XAct.IO.Compression.ICompressionService.AddFileToZip(System.IO.Stream,System.String,System.String)">
+            <summary>
+            Adds the file to the zip file.
+            <para>
+            If <paramref name="relativeToDirectoryFullName"/> = null, defaults to <c>file.DirectoryInfo</c>
+            </para>
+            </summary>
+            <param name="outputZipFileStream">The zip file stream.</param>
+            <param name="fileFullName">The file to add.</param>
+            <param name="relativeToDirectoryFullName"></param>
+        </member>
+        <member name="T:XAct.DirectoryInfoExtensions">
+            <summary>
+            Static Extensions methods to the DirectoryInfo object.
+            </summary>
+            <summary>
+            Extension Methods to the <see cref="T:System.IO.DirectoryInfo"/>.
+            </summary>
+        </member>
+        <member name="M:XAct.DirectoryInfoExtensions.CleanupDirectoryByFileCreationDate(System.IO.DirectoryInfo,System.String,System.Int32)">
+            <summary>
+            Cleanup directory, given a pattern such as "*.log"
+            </summary>
+            <param name="directoryInfo">Directory path</param>
+            <param name="pattern">Filename pattern, such as "*.log"</param>
+            <param name="deleteFilesWithCreatedDateOlderThanThisManyDays">Number of days after which files will be removed</param>
+        </member>
+        <member name="M:XAct.DirectoryInfoExtensions.DeleteFiles(System.IO.DirectoryInfo,System.String)">
+            <summary>
+            Delete files in a folder that are like the searchPattern, don't include subfolders.
+            </summary>
+            <param name="di"></param>
+            <param name="searchPattern">DOS like pattern (example: *.xml, ??a.txt)</param>
+            <returns>Number of files that have been deleted.</returns>
+        </member>
+        <member name="M:XAct.DirectoryInfoExtensions.DeleteFiles(System.IO.DirectoryInfo,System.String,System.Boolean)">
+            <summary>
+            Delete files in a folder that are like the searchPattern
+            </summary>
+            <param name="di"></param>
+            <param name="searchPattern">DOS like pattern (example: *.xml, ??a.txt)</param>
+            <param name="includeSubdirs"></param>
+            <returns>Number of files that have been deleted.</returns>
+            <remarks>
+            This function relies on DirectoryInfo.GetFiles() which will first get all the FileInfo objects in memory. This is good for folders with not too many files, otherwise
+            an implementation using Windows APIs can be more appropriate. I didn't need this functionality here but if you need it just let me know.
+            </remarks>
+        </member>
+        <member name="T:XAct.StreamExtensions">
+            <summary>
+            Extensions to the Stream object, that need a reference
+            to <see cref="T:XAct.IO.IIOService"/> for writting to Isolated Storage
+            or HD.
+            </summary>
+        </member>
+        <member name="M:XAct.StreamExtensions.WriteStreamToFile(System.IO.Stream,XAct.IO.IIOService,System.String,System.Boolean)">
+            <summary>
+            Writes Resource stream to File
+            </summary>
+            <param name="resourceStream">The resource stream.</param>
+            <param name="iioService">The iio service.</param>
+            <param name="absolutePath">The absolute path.</param>
+            <param name="overwriteOk">Ok to overwrite what ever is already there.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException">
+            An exception is raised if <paramref name="resourceStream"/> is null.
+              </exception>
+              
+            <exception cref="T:System.ArgumentNullException">
+            An exception is raised if <paramref name="absolutePath"/> is null.
+              </exception>
+              
+            <exception cref="T:System.ArgumentException">
+            An exception is raised if <paramref name="absolutePath"/> is
+            not an absolute Physical path.
+              </exception>
+              
+            <internal>
+            Used by Resource handling.
+              </internal>
+        </member>
+        <member name="T:XAct.IO.ITemplateRenderingService">
+            <summary>
+            Interface for a template drive output system.
+            <para>
+            Implemented by <c>NVelocityTemplateService</c>
+            in <c>XAct.IO.TemplateEngines.NVelocity</c>,
+            in <c>XAct.IO.TemplateEngines.RazorHost</c>, and
+            in <c>XAct.IO.TemplateEngines.StringTemplate</c>
+            </para>
+            </summary>
+        </member>
+        <member name="M:XAct.IO.ITemplateRenderingService.CompileTemplateString(System.String,System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Object,System.Boolean)">
+            <summary>
+            Compiles the source string template to the the output string.
+            </summary>
+            <param name="templateText">The template text.</param>
+            <param name="optionalReferencedAssemblies">The optional referenced assemblies.</param>
+            <param name="optionalContext">The optional context.</param>
+            <param name="avoidContextPrefixIfPossible">if set to <c>true</c> [avoid context prefix if possible].</param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.ITemplateRenderingService.CompileTemplateString(System.IO.Stream,System.String,System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Object,System.Boolean)">
+            <summary>
+            Compiles the source template string to the given output stream.
+            </summary>
+            <param name="outputStream">The stream.</param>
+            <param name="templateText">The template text.</param>
+            <param name="optionalReferencedAssemblies">The optional referenced assemblies.</param>
+            <param name="optionalContext">The optional context.</param>
+            <param name="avoidContextPrefixIfPossible">if set to <c>true</c> [avoid context prefix if possible].</param>
+            <returns>
+            The number of bytes written to the stream
+            </returns>
+        </member>
+        <member name="M:XAct.IO.ITemplateRenderingService.CompileTemplateFile(System.String,System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Object,System.Boolean)">
+            <summary>
+            Compiles the source template file to the target string.
+            </summary>
+            <param name="templateFileName">Name of the template file.</param>
+            <param name="optionalReferencedAssemblies">The optional referenced assemblies.</param>
+            <param name="optionalContext">The optional context.</param>
+            <param name="avoidContextPrefixIfPossible">if set to <c>true</c> [avoid context prefix if possible].</param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.ITemplateRenderingService.CompileTemplateFile(System.IO.Stream,System.String,System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Object,System.Boolean)">
+            <summary>
+            Compiles the source template file to the given output stream.
+            </summary>
+            <param name="outputStream">The output stream.</param>
+            <param name="templateFileName">Name of the template file.</param>
+            <param name="optionalReferencedAssemblies">The optional referenced assemblies.</param>
+            <param name="optionalContext">The optional context.</param>
+            <param name="avoidContextPrefixIfPossible">if set to <c>true</c> [avoid context prefix if possible].</param>
+            <returns>
+            The number of bytes written to the stream
+            </returns>
+        </member>
+        <member name="M:XAct.IO.ITemplateRenderingService.CompileTemplateStream(System.IO.TextReader,System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Object,System.Boolean)">
+            <summary>
+            Compiles the source template text stream to the target string.
+            </summary>
+            <param name="textReader">The text reader.</param>
+            <param name="optionalReferencedAssemblies">The optional referenced assemblies.</param>
+            <param name="optionalContext">The optional context.</param>
+            <param name="avoidContextPrefixIfPossible">if set to <c>true</c> [avoid context prefix if possible].</param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.ITemplateRenderingService.CompileTemplateStream(System.IO.Stream,System.IO.TextReader,System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Object,System.Boolean)">
+            <summary>
+            Compiles the source template text stream to the target output stream.
+            </summary>
+            <param name="outputStream">The output stream.</param>
+            <param name="textReader">The text reader.</param>
+            <param name="optionalReferencedAssemblies">The optional referenced assemblies.</param>
+            <param name="optionalContext">The optional context.</param>
+            <param name="avoidContextPrefixIfPossible">if set to <c>true</c> [avoid context prefix if possible].</param>
+            <returns>
+            The number of bytes written to the stream
+            </returns>
+        </member>
+        <member name="P:XAct.IO.ITemplateRenderingService.Configuration">
+            <summary>
+            Gets or sets the common settings.
+            <para>
+            The Configuration object is shared between instances of 
+            this service, therefore should only be modified as per the application's needs
+            during Bootstrapping, and no later.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XAct.IO.FileAgeComparer">
+            <summary>
+            Compare FileInfo objects (or strings which are the names of files) by datetime.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.FileAgeComparer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:XAct.IO.FileAgeComparer"/> class.
+            <para>
+            Default behavior is to compare using 
+            <see cref="F:XAct.IO.FileDateType.Created"/>
+            </para>
+            </summary>
+        </member>
+        <member name="M:XAct.IO.FileAgeComparer.#ctor(XAct.IO.FileDateType)">
+            <summary>
+            ctor, compares files using specified criteria
+            </summary>
+            <param name="comparison"></param>
+        </member>
+        <member name="M:XAct.IO.FileAgeComparer.Compare(System.Object,System.Object)">
+            <summary>
+            Compare two FileInfo objects and/or file-name strings
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <exception cref="T:System.ArgumentException"></exception>
+            <returns></returns>
+        </member>
+        <member name="T:XAct.IO.FileName">
+            <summary>
+              Generally static functions for manipulating FileNames/Paths, etc.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.FileName.Normalize(System.String)">
+            <summary>
+              Adds slash to the end of paths.
+            </summary>
+            <param name = "fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.FileName.Ext(System.String,System.Boolean)">
+            <summary>
+              Returns Extension of File given, including "."
+            </summary>
+            <remarks>
+              If No Extension found, returns empty string.
+            </remarks>
+            <param name = "fileName"></param>
+            <param name = "withDot">AddDot</param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.FileName.ChangeExt(System.String,System.String)">
+            <summary>
+              Changes Extension of FileName (TheFile.Dat -> TheFile.Tmp)
+            </summary>
+            <param name = "fileName"></param>
+            <param name = "qExt"></param>
+            <returns></returns>
+        </member>
+        <member name="T:XAct.IO.RegistryManager">
+            <summary>
+              Collection of often used static methods for working with the Registry.
+            </summary>
+            <remarks>
+              Good Sources: http://www.csharphelp.com/archives2/archive430.html
+              <br />
+              http://www.csharphelp.com/archives/archive79.html
+            </remarks>
+        </member>
+        <member name="M:XAct.IO.RegistryManager.KeyGetAsString(System.String,System.String)">
+            <summary>
+              ToDo
+            </summary>
+            <param name = "qBaseKey"></param>
+            <param name = "qKey"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.RegistryManager.KeyGet(System.String,System.String)">
+            <summary>
+              ToDO
+            </summary>
+            <param name = "baseKey"></param>
+            <param name = "subKey"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XAct.IO.RegistryManager.KeySet(Microsoft.Win32.RegistryKey,System.String,System.Object)">
+            <summary>
+              Set Single Registry Value
+            </summary>
+            <param name = "key"></param>
+            <param name = "valueName"></param>
+            <param name = "valueValue"></param>
+            <remarks>
+              Storing and retrieving Registry values is quite simple. Listing 2 illustrates the syntax for writing a value to the Registry using the SetValue method of the RegistryKey class. There is no separate method for creating a value. If the value already exists, then SetValue will update it. If it does not already exist, it will automatically be created.
+            </remarks>
+        </member>
+        <member name="T:XAct.IO.TemplateEngines.ITemplateRenderingServiceConfiguration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:XAct.IO.TemplateEngines.ITemplateRenderingServiceConfiguration.EmbedVariablesDirectlyWhenPossible">
+            <summary>
+            Gets or sets a value indicating whether to use Model/Context.
+            container when setting barialbes.
+            </summary>
+            <value>
+            	<c>true</c> if [embed variables directly when possible]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:XAct.IO.TemplateEngines.Implementations.TemplateRenderingServiceConfiguration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:XAct.IO.TemplateEngines.Implementations.TemplateRenderingServiceConfiguration.EmbedVariablesDirectlyWhenPossible">
+            <summary>
+            Gets or sets a value indicating whether to use Model/Context.
+            container when setting barialbes.
+            </summary>
+            <value>
+            	<c>true</c> if [embed variables directly when possible]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:XAct.IO.XFileInfo">
+            <summary>
+              Class for Information about a file.
+            </summary>
+        </member>
+        <member name="M:XAct.IO.XFileInfo.FileAge(System.Int64)">
+            <summary>
+            Returns the age of the file.
+            </summary>
+            <param name="fileCreationTime">The file creation time.</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
